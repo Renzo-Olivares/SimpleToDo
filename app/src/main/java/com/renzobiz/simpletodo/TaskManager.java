@@ -14,18 +14,22 @@ public class TaskManager {
         taskMap = new LinkedHashMap<>();
     }
 
-    public TaskManager get(){
+    public static TaskManager get(){
         if(sTaskManager == null){
             sTaskManager = new TaskManager();
         }
         return sTaskManager;
     }
 
-    private List<Task> getTasks(){
+    public void addTask(Task task){
+        taskMap.put(task.getTaskId(), task);
+    }
+
+    public List<Task> getTasks(){
         return new ArrayList<>(taskMap.values());
     }
 
-    private Task getTask(UUID taskID){
+    public Task getTask(UUID taskID){
         return taskMap.get(taskID);
     }
 }
