@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,10 +24,14 @@ public class TaskFragment extends Fragment {
     private EditText mTaskTitle;
     private EditText mTaskDetails;
     private Button mDateButton;
+    private Button mTimeButton;
     private Task mTask;
+    private Date mMasterDate;
     private static final String DIALOG_DATE="DialogDate";
+    private static final String DIALOG_TIME="DialogTime";
     private static final String ARGS_TASKID = "taskid";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,6 +73,8 @@ public class TaskFragment extends Fragment {
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
         mDateButton = v.findViewById(R.id.due_button);
+        mTimeButton = v.findViewById(R.id.time_button);
+        mMasterDate = mTask.getTaskDeadline();
 
         mTaskTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,6 +111,7 @@ public class TaskFragment extends Fragment {
             }
         });
 
+
         updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +120,17 @@ public class TaskFragment extends Fragment {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mTask.getTaskDeadline());
                 dialog.setTargetFragment(TaskFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
+            }
+        });
+
+        mTimeButton.setText(mTask.getTaskDeadline().toString());
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+                TimePickerFragment dialog = TimePickerFragment.newInstance(mTask.getTaskDeadline());
+                dialog.setTargetFragment(TaskFragment.this, REQUEST_TIME);
+                dialog.show(manager, DIALOG_TIME);
             }
         });
 
@@ -127,14 +146,51 @@ public class TaskFragment extends Fragment {
             return;
         }
 
-        if(requestCode == REQUEST_DATE){
-            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-            mTask.setTaskDeadline(date);
-            updateDate();
+        switch(requestCode) {
+            case REQUEST_DATE:
+                Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                Calendar calendar = setupCalendar(date);
+
+                Calendar cal = setupCalendar(mMasterDate);
+                cal.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+                cal.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+                cal.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+
+                Date newDate = cal.getTime();
+                mTask.setTaskDeadline(newDate);
+                updateDate(cal);
+                break;
+            case REQUEST_TIME:
+                Date dateTime = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+                Calendar timeCalendar = setupCalendar(dateTime);
+
+                Calendar time = setupCalendar(mMasterDate);
+                time.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
+                time.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
+
+                Date newTime = time.getTime();
+
+                mTask.setTaskDeadline(newTime);
+                updateDate(time);
+                break;
+            default:
+                super.onActivityResult(requestCode,resultCode,data);
         }
     }
 
-    private void updateDate() {
+    private Calendar setupCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return calendar;
+    }
+
+    private void updateDate(Calendar cal) {
+        mDateButton.setText(mTask.getTaskDeadline().toString());
+        mMasterDate = cal.getTime();
+    }
+
+    private void updateDate(){
         mDateButton.setText(mTask.getTaskDeadline().toString());
     }
 

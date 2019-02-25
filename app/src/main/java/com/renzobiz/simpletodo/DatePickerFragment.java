@@ -1,6 +1,7 @@
 package com.renzobiz.simpletodo;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,9 +47,7 @@ public class DatePickerFragment extends DialogFragment {
                         Date date = new GregorianCalendar(year, month, day).getTime();
                         sendResult(Activity.RESULT_OK, date);
                     }
-                })
-                .create();
-
+                }).create();
     }
 
     private void sendResult(int resultCode, Date date){
