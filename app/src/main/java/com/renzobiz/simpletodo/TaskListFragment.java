@@ -28,7 +28,6 @@ public class TaskListFragment extends Fragment {
         updateUI(false);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task_list,container,false);
@@ -37,16 +36,15 @@ public class TaskListFragment extends Fragment {
         }
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
-        final TaskManager tm = TaskManager.get();
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Task task = new Task();
-                tm.addTask(task);
-                updateUI(true);
+                TaskManager.get(getActivity()).addTask(task);
                 Intent intent = TaskPagerActivity.newIntent(getActivity(),task.getTaskId());
                 startActivity(intent);
+                updateUI(true);
             }
         });
 
@@ -56,7 +54,7 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateUI(boolean newAdapter){
-        TaskManager tm = TaskManager.get();
+        TaskManager tm = TaskManager.get(getActivity());
         List<Task> tasks = tm.getTasks();
 
         if(mAdapter == null | newAdapter){
@@ -69,6 +67,7 @@ public class TaskListFragment extends Fragment {
                 mAdapter.notifyItemChanged(mAdapterPosition);
                 mAdapterPosition = -1;
             }
+            mAdapter.setTasks(tasks);
         }
 
     }
@@ -122,6 +121,10 @@ public class TaskListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mTasks.size();
+        }
+
+        public void setTasks(List<Task> tasks){
+            mTasks = tasks;
         }
     }
 

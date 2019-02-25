@@ -30,7 +30,7 @@ public class TaskPagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_pager);
 
         UUID taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASKID);
-        mTasks = TaskManager.get().getTasks();
+        mTasks = TaskManager.get(this).getTasks();
         mTaskPager = findViewById(R.id.task_view_pager);
         FragmentManager fm = getSupportFragmentManager();
 

@@ -47,7 +47,11 @@ public class Task {
     }
 
     public Task(){
-        taskId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Task(UUID id){
+        taskId = id;
         taskDeadline = new Date();
     }
 }
