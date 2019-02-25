@@ -1,7 +1,9 @@
 # SimpleToDo
 To Do:
 - Method to dismiss item from list (either through swipe, or check mark)
-- Add due time to list item view
+- Add red timer indicator to indicate task approaching deadline on list item view
 - add placeholder when empty recyclerview
-- add a new view for due date/ time instead of button
 - when delete task, implement snackbar to undo
+- implement notifications
+    - reminders
+- Backup and restore db
