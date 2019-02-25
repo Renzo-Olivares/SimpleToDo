@@ -35,6 +35,11 @@ public class TaskManager {
         taskDataBase.insert(TaskTable.NAME, null, values);
     }
 
+    public void deleteTask(UUID taskID){
+        String uuidString = taskID.toString();
+        taskDataBase.delete(TaskTable.NAME, TaskTable.Cols.UUID + " = ?", new String[] { uuidString });
+    }
+
     public List<Task> getTasks(){
         Map<UUID, Task> tasks= new LinkedHashMap<>();
 

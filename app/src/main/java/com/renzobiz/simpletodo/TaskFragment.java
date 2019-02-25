@@ -1,10 +1,15 @@
 package com.renzobiz.simpletodo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -18,10 +23,30 @@ public class TaskFragment extends Fragment {
     private static final String ARGS_TASKID = "taskid";
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.delete_task:
+                TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+                Intent intent = TaskListActivity.newIntent(getActivity());
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_task,menu);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID mTaskID = (UUID) getArguments().getSerializable(ARGS_TASKID);
         mTask = TaskManager.get(getActivity()).getTask(mTaskID);
+        setHasOptionsMenu(true);
     }
 
     @Override
