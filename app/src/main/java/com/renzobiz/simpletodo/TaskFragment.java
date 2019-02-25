@@ -15,16 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
+import static java.text.DateFormat.FULL;
+import static java.text.DateFormat.SHORT;
+
 public class TaskFragment extends Fragment {
     private EditText mTaskTitle;
     private EditText mTaskDetails;
-    private Button mDateButton;
-    private Button mTimeButton;
+    private TextView mDueDateText;
+    private TextView mDueTimeText;
     private Task mTask;
     private Date mMasterDate;
     private static final String DIALOG_DATE="DialogDate";
@@ -72,8 +77,10 @@ public class TaskFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_task,container,false);
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
-        mDateButton = v.findViewById(R.id.due_button);
-        mTimeButton = v.findViewById(R.id.time_button);
+        mDueDateText = v.findViewById(R.id.date_text_view);
+        mDueTimeText = v.findViewById(R.id.due_time_text_view);
+
+
         mMasterDate = mTask.getTaskDeadline();
 
         mTaskTitle.addTextChangedListener(new TextWatcher() {
@@ -113,7 +120,7 @@ public class TaskFragment extends Fragment {
 
 
         updateDate();
-        mDateButton.setOnClickListener(new View.OnClickListener() {
+        mDueDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager manager = getFragmentManager();
@@ -123,8 +130,7 @@ public class TaskFragment extends Fragment {
             }
         });
 
-        mTimeButton.setText(mTask.getTaskDeadline().toString());
-        mTimeButton.setOnClickListener(new View.OnClickListener() {
+        mDueTimeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager manager = getFragmentManager();
@@ -186,12 +192,14 @@ public class TaskFragment extends Fragment {
     }
 
     private void updateDate(Calendar cal) {
-        mDateButton.setText(mTask.getTaskDeadline().toString());
+        mDueDateText.setText(DateFormat.getDateInstance(FULL).format(mTask.getTaskDeadline()));
+        mDueTimeText.setText(DateFormat.getTimeInstance(SHORT).format(mTask.getTaskDeadline()));
         mMasterDate = cal.getTime();
     }
 
     private void updateDate(){
-        mDateButton.setText(mTask.getTaskDeadline().toString());
+        mDueDateText.setText(DateFormat.getDateInstance(FULL).format(mTask.getTaskDeadline()));
+        mDueTimeText.setText(DateFormat.getTimeInstance(SHORT).format(mTask.getTaskDeadline()));
     }
 
     public static TaskFragment newInstance(UUID mTaskID){
