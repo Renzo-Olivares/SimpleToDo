@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,9 @@ public class TaskListFragment extends Fragment {
         }
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
+
+        //mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(),
+                //DividerItemDecoration.VERTICAL));
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
