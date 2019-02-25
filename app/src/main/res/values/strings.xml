@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SimpleToDo</string>
     <string name="delete_task">Delete Task</string>
+    <string name="date_picker_title">Due Date for Task:</string>
 </resources>
