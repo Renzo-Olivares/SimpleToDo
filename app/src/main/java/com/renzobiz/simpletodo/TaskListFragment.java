@@ -51,7 +51,7 @@ public class TaskListFragment extends Fragment {
             public void onClick(View view) {
                 Task task = new Task();
                 TaskManager.get(getActivity()).addTask(task);
-                Intent intent = TaskPagerActivity.newIntent(getActivity(),task.getTaskId());
+                Intent intent = TaskPagerActivity.newIntent(getActivity(),task.getTaskId(), false);
                 startActivity(intent);
                 updateUI(true);
             }
@@ -89,7 +89,7 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             mAdapterPosition = getAdapterPosition();
-            Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getTaskId());
+            Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getTaskId(), true);
             startActivity(intent);
         }
 

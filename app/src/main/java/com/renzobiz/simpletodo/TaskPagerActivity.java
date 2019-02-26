@@ -14,13 +14,15 @@ import java.util.UUID;
 
 public class TaskPagerActivity extends AppCompatActivity {
     private static final String EXTRA_TASKID = "com.renzobiz.android.simpletodo.taskid";
+    private static final String EXTRA_TOOL = "com.renzobiz.android.simpletodo.tool";
     private ViewPager mTaskPager;
     private List<Task> mTasks;
     private int currentItem;
 
-    public static Intent newIntent(Context packageContext, UUID taskID){
+    public static Intent newIntent(Context packageContext, UUID taskID, boolean toolbar){
         Intent intent = new Intent(packageContext, TaskPagerActivity.class);
         intent.putExtra(EXTRA_TASKID, taskID);
+        intent.putExtra(EXTRA_TOOL, toolbar);
         return intent;
     }
 
@@ -30,6 +32,7 @@ public class TaskPagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_pager);
 
         UUID taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASKID);
+
         mTasks = TaskManager.get(this).getTasks();
         mTaskPager = findViewById(R.id.task_view_pager);
         FragmentManager fm = getSupportFragmentManager();
@@ -37,8 +40,9 @@ public class TaskPagerActivity extends AppCompatActivity {
         mTaskPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
+                boolean tool = getIntent().getBooleanExtra(EXTRA_TOOL,false);
                 Task task = mTasks.get(position);
-                return TaskFragment.newInstance(task.getTaskId());
+                return TaskFragment.newInstance(task.getTaskId(), tool);
             }
 
             @Override

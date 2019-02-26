@@ -37,6 +37,7 @@ public class TaskFragment extends Fragment {
     private static final String DIALOG_DATE="DialogDate";
     private static final String DIALOG_TIME="DialogTime";
     private static final String ARGS_TASKID = "taskid";
+    private static final String ARGS_TOOL = "tool";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
 
@@ -64,20 +65,20 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID mTaskID = (UUID) getArguments().getSerializable(ARGS_TASKID);
         mTask = TaskManager.get(getActivity()).getTask(mTaskID);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(getArguments().getBoolean(ARGS_TOOL));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         TaskManager.get(getActivity()).updateTask(mTask);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task,container,false);
-        setUpToolbar(v);
+        boolean tool = getArguments().getBoolean(ARGS_TOOL);
+        setUpToolbar(v, tool);
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
         mDueDateText = v.findViewById(R.id.date_text_view);
@@ -206,19 +207,29 @@ public class TaskFragment extends Fragment {
         mDueTimeText.setText(DateFormat.getTimeInstance(SHORT).format(mTask.getTaskDeadline()));
     }
 
-    public static TaskFragment newInstance(UUID mTaskID){
+    public static TaskFragment newInstance(UUID mTaskID, boolean tool){
         Bundle args = new Bundle();
         args.putSerializable(ARGS_TASKID, mTaskID);
+        args.putSerializable(ARGS_TOOL, tool);
         TaskFragment fragment = new TaskFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    private void setUpToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.new_task_app_bar);
+    private void setUpToolbar(View view, boolean tool) {
+        Toolbar toolbarEdit = view.findViewById(R.id.edit_task_app_bar);
+        Toolbar toolbarNew = view.findViewById(R.id.new_task_app_bar);
+
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
-            activity.setSupportActionBar(toolbar);
+            if(tool){
+                activity.setSupportActionBar(toolbarEdit);
+                toolbarNew.setVisibility(View.GONE);
+            }
+            else{
+                activity.setSupportActionBar(toolbarNew);
+                toolbarEdit.setVisibility(View.GONE);
+            }
         }
     }
 

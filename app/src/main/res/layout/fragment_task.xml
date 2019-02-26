@@ -25,7 +25,20 @@
                 android:textColor="@android:color/black"
                 android:textSize="24sp"
                 android:gravity="center"/>
+        </android.support.v7.widget.Toolbar>
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/edit_task_app_bar"
+            android:layout_width="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/edit_task_toolbar_title"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:gravity="center"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
