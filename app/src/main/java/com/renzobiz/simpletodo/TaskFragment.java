@@ -3,12 +3,15 @@ package com.renzobiz.simpletodo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -34,6 +38,7 @@ public class TaskFragment extends Fragment {
     private TextView mDueTimeText;
     private Task mTask;
     private Date mMasterDate;
+    private MaterialButton mSaveButton;
     private static final String DIALOG_DATE="DialogDate";
     private static final String DIALOG_TIME="DialogTime";
     private static final String ARGS_TASKID = "taskid";
@@ -83,10 +88,44 @@ public class TaskFragment extends Fragment {
         mTaskDetails = v.findViewById(R.id.task_details);
         mDueDateText = v.findViewById(R.id.date_text_view);
         mDueTimeText = v.findViewById(R.id.due_time_text_view);
+        mSaveButton = v.findViewById(R.id.save_button);
 
 
 
         mMasterDate = mTask.getTaskDeadline();
+
+        if(!getArguments().getBoolean(ARGS_TOOL)){
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
+            v.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    if(i == KeyEvent.KEYCODE_BACK)
+                    {
+                        TaskManager.get(getActivity()).deleteTask((UUID) getArguments().getSerializable(ARGS_TASKID));
+                        Intent intent = TaskListActivity.newIntent(getActivity());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            mSaveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = TaskListActivity.newIntent(getActivity());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
+        }
+        else{
+            mSaveButton.setVisibility(View.GONE);
+        }
 
         mTaskTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -238,6 +277,12 @@ public class TaskFragment extends Fragment {
                         return false;
                     }
                 });
+                toolbarEdit.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getActivity().onNavigateUp();
+                    }
+                });
             }
             else{
                 activity.setSupportActionBar(toolbarNew);
@@ -245,5 +290,6 @@ public class TaskFragment extends Fragment {
             }
         }
     }
+
 
 }
