@@ -225,6 +225,19 @@ public class TaskFragment extends Fragment {
             if(tool){
                 activity.setSupportActionBar(toolbarEdit);
                 toolbarNew.setVisibility(View.GONE);
+                toolbarEdit.inflateMenu(R.menu.fragment_task);//changed
+                toolbarEdit.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if(item.getItemId() ==  R.id.delete_task) {
+                            TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+                            Intent intent = TaskListActivity.newIntent(getActivity());
+                            startActivity(intent);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
             }
             else{
                 activity.setSupportActionBar(toolbarNew);
