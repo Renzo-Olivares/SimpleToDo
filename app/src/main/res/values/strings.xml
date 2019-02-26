@@ -4,6 +4,7 @@
     <string name="edit_task_toolbar_title">Edit Task</string>
     <string name="save_button_label">Save</string>
     <string name="delete_task">Delete Task</string>
+    <string name="delete_swipe">Delete</string>
     <string name="date_picker_title">Due Date for Task:</string>
     <string name="time_picker_title">Time Task is Due:</string>
 </resources>

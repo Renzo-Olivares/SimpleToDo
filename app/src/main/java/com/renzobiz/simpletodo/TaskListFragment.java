@@ -1,7 +1,11 @@
 package com.renzobiz.simpletodo;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,21 +13,26 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.List;
+import java.util.UUID;
 
 import static java.text.DateFormat.FULL;
 
 public class TaskListFragment extends Fragment {
     private static final String EXTRA_POSITION = "adapter position";
+    private static final String EXTRA_TASKID = "task id";
+
     private RecyclerView mTaskRecycler;
     private FloatingActionButton mFloatingActionButton;
     private TaskAdapter mAdapter;
     private int mAdapterPosition = -1;
+    private UUID taskid;
 
     @Override
     public void onResume() {
@@ -38,6 +47,7 @@ public class TaskListFragment extends Fragment {
         setUpToolbar(v);
         if(savedInstanceState != null){
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
+            taskid = (UUID) savedInstanceState.getSerializable(EXTRA_TASKID);
         }
 
         mTaskRecycler = v.findViewById(R.id.task_recycler);
@@ -45,6 +55,24 @@ public class TaskListFragment extends Fragment {
 
         //mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(),
                 //DividerItemDecoration.VERTICAL));
+
+        SwipeToDeleteCallback swipeHandler = new SwipeToDeleteCallback(getActivity()){
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return super.onMove(recyclerView, viewHolder, viewHolder1);
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                super.onSwiped(viewHolder, i);
+                TaskManager.get(getActivity()).deleteTask(taskid);
+                mAdapter.notifyItemRemoved(mAdapterPosition);
+                updateUI(false);
+            }
+        };
+
+        ItemTouchHelper itemHelper = new ItemTouchHelper(swipeHandler);
+        itemHelper.attachToRecyclerView(mTaskRecycler);
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +148,7 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(TaskHolder taskHolder, int position) {
             Task task = mTasks.get(position);
+            taskid = task.getTaskId();
             taskHolder.bind(task);
         }
 
@@ -141,6 +170,7 @@ public class TaskListFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_POSITION, mAdapterPosition);
+        outState.putSerializable(EXTRA_TASKID,taskid);
     }
 
     private void setUpToolbar(View view) {

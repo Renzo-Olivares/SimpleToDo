@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -99,6 +100,7 @@ public class TaskFragment extends Fragment {
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
                     if(i == KeyEvent.KEYCODE_BACK)
                     {
+                        Toast.makeText(getActivity(), "hello from back key", Toast.LENGTH_SHORT).show();
                         TaskManager.get(getActivity()).deleteTask((UUID) getArguments().getSerializable(ARGS_TASKID));
                         getActivity().onBackPressed();
                         return true;
@@ -129,7 +131,7 @@ public class TaskFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String taskTitle = charSequence.toString();
-                mTask.setTaskTitle(charSequence.toString());
+                mTask.setTaskTitle(taskTitle);
             }
 
             @Override
