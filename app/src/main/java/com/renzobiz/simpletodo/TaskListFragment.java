@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,10 @@ public class TaskListFragment extends Fragment {
         if(savedInstanceState != null){
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
         }
+
+        //seting up toolbar
+        setUpToolbar(v);
+
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
 
@@ -136,5 +142,13 @@ public class TaskListFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_POSITION, mAdapterPosition);
+    }
+
+    private void setUpToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.app_bar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolbar);
+        }
     }
 }
