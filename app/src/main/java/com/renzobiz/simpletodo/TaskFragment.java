@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,10 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -103,10 +100,7 @@ public class TaskFragment extends Fragment {
                     if(i == KeyEvent.KEYCODE_BACK)
                     {
                         TaskManager.get(getActivity()).deleteTask((UUID) getArguments().getSerializable(ARGS_TASKID));
-                        Intent intent = TaskListActivity.newIntent(getActivity());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        getActivity().finish();
+                        getActivity().onBackPressed();
                         return true;
                     }
                     return false;
