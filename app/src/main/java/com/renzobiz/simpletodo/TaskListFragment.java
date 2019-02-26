@@ -31,15 +31,14 @@ public class TaskListFragment extends Fragment {
         updateUI(false);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task_list,container,false);
+        setUpToolbar(v);
         if(savedInstanceState != null){
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
         }
-
-        //seting up toolbar
-        setUpToolbar(v);
 
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);

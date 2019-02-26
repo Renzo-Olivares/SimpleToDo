@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -53,8 +55,8 @@ public class TaskFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_task,menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -75,10 +77,12 @@ public class TaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task,container,false);
+        setUpToolbar(v);
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
         mDueDateText = v.findViewById(R.id.date_text_view);
         mDueTimeText = v.findViewById(R.id.due_time_text_view);
+
 
 
         mMasterDate = mTask.getTaskDeadline();
@@ -208,6 +212,14 @@ public class TaskFragment extends Fragment {
         TaskFragment fragment = new TaskFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void setUpToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.new_task_app_bar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null) {
+            activity.setSupportActionBar(toolbar);
+        }
     }
 
 }
