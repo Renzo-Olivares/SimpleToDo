@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +50,17 @@ public class TaskPagerActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return mTasks.size();
+            }
+        });
+
+        mTaskPager.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(getIntent().getBooleanExtra(EXTRA_TOOL,false)){
+                    return false;
+                }else{
+                    return true;
+                }
             }
         });
 
