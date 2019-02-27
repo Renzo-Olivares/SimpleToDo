@@ -18,7 +18,6 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/new_task_app_bar"
             android:layout_width="match_parent"
-            android:background="@android:color/transparent"
             android:layout_height="?attr/actionBarSize">
             <TextView
                 android:layout_width="match_parent"
@@ -33,7 +32,6 @@
             android:id="@+id/edit_task_app_bar"
             android:layout_width="match_parent"
             app:navigationIcon="@drawable/ic_up"
-            android:background="@android:color/transparent"
             android:layout_height="?attr/actionBarSize">
         <TextView
             android:layout_width="match_parent"
@@ -148,11 +146,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
         android:elevation="8dp"
         android:gravity="center"
         android:text="due time"
         android:textColor="@android:color/black"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.404"
         app:layout_constraintStart_toEndOf="@+id/imageView3"

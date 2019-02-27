@@ -19,7 +19,6 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:background="@android:color/transparent"
             android:layout_height="?attr/actionBarSize">
             <TextView
                 android:layout_width="match_parent"
