@@ -1,9 +1,6 @@
 package com.renzobiz.simpletodo;
 
-import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -53,8 +50,7 @@ public class TaskListFragment extends Fragment {
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
 
-        //mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(),
-                //DividerItemDecoration.VERTICAL));
+        mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         SwipeToDeleteCallback swipeHandler = new SwipeToDeleteCallback(getActivity()){
             @Override
@@ -77,9 +73,7 @@ public class TaskListFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task task = new Task();
-                TaskManager.get(getActivity()).addTask(task);
-                Intent intent = TaskPagerActivity.newIntent(getActivity(),task.getTaskId(), false);
+                Intent intent = TaskPagerActivity.newIntent(getActivity(),null, false);
                 startActivity(intent);
                 updateUI(true);
             }

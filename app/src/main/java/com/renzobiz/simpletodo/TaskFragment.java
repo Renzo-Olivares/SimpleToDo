@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -29,7 +27,7 @@ import java.util.UUID;
 import static java.text.DateFormat.FULL;
 import static java.text.DateFormat.SHORT;
 
-public class TaskFragment extends Fragment {
+public class TaskFragment extends Fragment implements IOnBackPressed{
     private EditText mTaskTitle;
     private EditText mTaskDetails;
     private TextView mDueDateText;
@@ -43,6 +41,8 @@ public class TaskFragment extends Fragment {
     private static final String ARGS_TOOL = "tool";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
+    private static int back_counter = 0;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,6 +57,24 @@ public class TaskFragment extends Fragment {
         }
     }
 
+   @Override
+    public void onBackPressed() {
+        if(!getArguments().getBoolean(ARGS_TOOL) && back_counter == 0){
+            back_counter++;
+            TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+            backPressIntent();
+        }else{
+            backPressIntent();
+        }
+    }
+
+    private void backPressIntent() {
+        Intent intent = TaskListActivity.newIntent(getActivity());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_task,menu);
@@ -67,6 +85,8 @@ public class TaskFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID mTaskID = (UUID) getArguments().getSerializable(ARGS_TASKID);
+        back_counter = 0;
+
         mTask = TaskManager.get(getActivity()).getTask(mTaskID);
         setHasOptionsMenu(getArguments().getBoolean(ARGS_TOOL));
     }
@@ -90,32 +110,14 @@ public class TaskFragment extends Fragment {
 
 
 
+
         mMasterDate = mTask.getTaskDeadline();
 
         if(!getArguments().getBoolean(ARGS_TOOL)){
-            v.setFocusableInTouchMode(true);
-            v.requestFocus();
-            v.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                    if(i == KeyEvent.KEYCODE_BACK)
-                    {
-                        Toast.makeText(getActivity(), "hello from back key", Toast.LENGTH_SHORT).show();
-                        TaskManager.get(getActivity()).deleteTask((UUID) getArguments().getSerializable(ARGS_TASKID));
-                        getActivity().onBackPressed();
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = TaskListActivity.newIntent(getActivity());
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    getActivity().finish();
+                    backPressIntent();
                 }
             });
         }
@@ -130,8 +132,8 @@ public class TaskFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String taskTitle = charSequence.toString();
-                mTask.setTaskTitle(taskTitle);
+                    String taskTitle = charSequence.toString();
+                    mTask.setTaskTitle(taskTitle);
             }
 
             @Override
@@ -148,8 +150,8 @@ public class TaskFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String taskDetails = charSequence.toString();
-                mTask.setTaskDetails(taskDetails);
+                    String taskDetails = charSequence.toString();
+                    mTask.setTaskDetails(taskDetails);
             }
 
             @Override
@@ -159,7 +161,9 @@ public class TaskFragment extends Fragment {
         });
 
 
+
         updateDate();
+
         mDueDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

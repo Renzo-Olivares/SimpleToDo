@@ -28,12 +28,35 @@ public class TaskPagerActivity extends AppCompatActivity {
         return intent;
     }
 
+
+    @Override
+    public void onBackPressed() {
+        tellFragments();
+        super.onBackPressed();
+    }
+
+    private void tellFragments(){
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for(Fragment f : fragments){
+            if(f != null && f instanceof TaskFragment)
+                ((TaskFragment)f).onBackPressed();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_pager);
 
-        UUID taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASKID);
+        UUID taskID;
+
+        if (!getIntent().getBooleanExtra(EXTRA_TOOL, false)) {
+            Task task = new Task();
+            TaskManager.get(this).addTask(task);
+            taskID = task.getTaskId();
+        }else{
+            taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASKID);
+        }
 
         mTasks = TaskManager.get(this).getTasks();
         mTaskPager = findViewById(R.id.task_view_pager);

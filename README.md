@@ -6,7 +6,6 @@ To Do:
 - when delete task, implement snackbar to undo (5)
 - fix back button override
 - fix up styles (5)
-- rethink the add button behavior, specifically where the actual add happens. This way I dont have to override the back button on new task fragment (2)
 - implement dark mode (toggle by night mode setting from android and user facing toggle) (2)
 - app launch screen and app icon(5)
 - Fix picker dialogs (5)
