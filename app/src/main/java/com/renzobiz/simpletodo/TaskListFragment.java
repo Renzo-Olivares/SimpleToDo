@@ -87,7 +87,7 @@ public class TaskListFragment extends Fragment {
 
                 mAdapter.removeItem(viewHolder.getAdapterPosition());
                 TaskManager.get(getActivity()).deleteTask(taskid);
-                updateUI(false);
+                updateUI(true);
 
                 Snackbar.make(getView(), R.string.undo_snack_label, Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo_snack_action, new View.OnClickListener() {
