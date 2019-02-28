@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -22,8 +23,10 @@ import java.util.UUID;
 import static java.text.DateFormat.FULL;
 
 public class TaskListFragment extends Fragment {
-    private static final String EXTRA_POSITION = "adapter position";
-    private static final String EXTRA_TASKID = "task id";
+    private static final String EXTRA_POSITION = "com.renzobiz.android.simpletodo.adapterposition";
+    private static final String EXTRA_TASKID = "com.renzobiz.android.simpletodo.taskid";
+    private static final String ARGS_DRAFT = "has_draft";
+    private static final String ARGS_SAVETASK = "save_task";
 
     private RecyclerView mTaskRecycler;
     private FloatingActionButton mFloatingActionButton;
@@ -42,9 +45,26 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task_list,container,false);
         setUpToolbar(v);
-        if(savedInstanceState != null){
+
+        boolean hasDraft = (boolean) getArguments().getBoolean(ARGS_DRAFT, false);
+
+        if(savedInstanceState != null) {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
             taskid = (UUID) savedInstanceState.getSerializable(EXTRA_TASKID);
+        }
+        ;
+        if(hasDraft){
+            Snackbar.make(container, R.string.draft_snack_label, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.draft_snack_action, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateUI(true);
+                            Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
+                            TaskManager.get(getActivity()).addTask(saveTask);
+                            mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
+                            updateUI(false);
+                        }
+                    }).show();
         }
 
         mTaskRecycler = v.findViewById(R.id.task_recycler);
@@ -61,9 +81,23 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 super.onSwiped(viewHolder, i);
+                //save task into temporary task for restore
+                final Task saveTask = TaskManager.get(getActivity()).getTask(taskid);
+                final int deletedPosition = viewHolder.getAdapterPosition();
+
+                mAdapter.removeItem(viewHolder.getAdapterPosition());
                 TaskManager.get(getActivity()).deleteTask(taskid);
-                mAdapter.notifyItemRemoved(mAdapterPosition);
                 updateUI(false);
+
+                Snackbar.make(getView(), R.string.undo_snack_label, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo_snack_action, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TaskManager.get(getActivity()).addTask(saveTask);
+                                mAdapter.restoreItem(saveTask, deletedPosition);
+                                updateUI(false);
+                            }
+                        }).show();
             }
         };
 
@@ -110,7 +144,6 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            mAdapterPosition = getAdapterPosition();
             Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getTaskId(), true);
             startActivity(intent);
         }
@@ -143,6 +176,7 @@ public class TaskListFragment extends Fragment {
         public void onBindViewHolder(TaskHolder taskHolder, int position) {
             Task task = mTasks.get(position);
             taskid = task.getTaskId();
+            mAdapterPosition = position;
             taskHolder.bind(task);
         }
 
@@ -157,6 +191,16 @@ public class TaskListFragment extends Fragment {
 
         public void setTasks(List<Task> tasks){
             mTasks = tasks;
+        }
+
+        public void removeItem(int position) {
+            mTasks.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        public void restoreItem(Task task, int position) {
+            mTasks.add(position, task);
+            notifyItemInserted(position);
         }
     }
 
@@ -173,5 +217,14 @@ public class TaskListFragment extends Fragment {
         if (activity != null) {
             activity.setSupportActionBar(toolbar);
         }
+    }
+
+    public static TaskListFragment newInstance(boolean hasDraft, Task saveTask){
+        Bundle args = new Bundle();
+        args.putSerializable(ARGS_DRAFT, hasDraft);
+        args.putParcelable(ARGS_SAVETASK, saveTask);
+        TaskListFragment fragment = new TaskListFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

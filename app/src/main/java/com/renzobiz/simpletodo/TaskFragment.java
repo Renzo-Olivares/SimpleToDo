@@ -49,7 +49,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         switch(item.getItemId()){
             case R.id.delete_task:
                 TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
-                Intent intent = TaskListActivity.newIntent(getActivity());
+                Intent intent = TaskListActivity.newIntent(getActivity(), false,null);
                 startActivity(intent);
                 return true;
             default:
@@ -59,17 +59,21 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
 
    @Override
     public void onBackPressed() {
-        if(!getArguments().getBoolean(ARGS_TOOL) && back_counter == 0){
-            back_counter++;
-            TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
-            backPressIntent();
-        }else{
-            backPressIntent();
-        }
+       if (back_counter == 0) {
+           if(!getArguments().getBoolean(ARGS_TOOL)){
+               back_counter++;
+               Task saveTask = mTask;
+               TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+               backPressIntent(true, saveTask);
+           }else{
+               back_counter++;
+               backPressIntent(false,null);
+           }
+       }
     }
 
-    private void backPressIntent() {
-        Intent intent = TaskListActivity.newIntent(getActivity());
+    private void backPressIntent(boolean hasDraft, Task task) {
+        Intent intent = TaskListActivity.newIntent(getActivity(), hasDraft,task);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();
@@ -108,16 +112,13 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         mDueTimeText = v.findViewById(R.id.due_time_text_view);
         mSaveButton = v.findViewById(R.id.save_button);
 
-
-
-
         mMasterDate = mTask.getTaskDeadline();
 
         if(!getArguments().getBoolean(ARGS_TOOL)){
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backPressIntent();
+                    backPressIntent(false,null);
                 }
             });
         }
@@ -270,7 +271,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() ==  R.id.delete_task) {
                             TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
-                            Intent intent = TaskListActivity.newIntent(getActivity());
+                            Intent intent = TaskListActivity.newIntent(getActivity(), false, null);
                             startActivity(intent);
                             return true;
                         }
