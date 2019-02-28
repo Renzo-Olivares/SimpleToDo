@@ -27,6 +27,7 @@ public class TaskListFragment extends Fragment {
     private static final String EXTRA_TASKID = "com.renzobiz.android.simpletodo.taskid";
     private static final String ARGS_DRAFT = "has_draft";
     private static final String ARGS_SAVETASK = "save_task";
+    private static final String ARGS_NOTDRAFT = "not_draft";
 
     private RecyclerView mTaskRecycler;
     private FloatingActionButton mFloatingActionButton;
@@ -46,7 +47,8 @@ public class TaskListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_task_list,container,false);
         setUpToolbar(v);
 
-        boolean hasDraft = (boolean) getArguments().getBoolean(ARGS_DRAFT, false);
+        boolean hasDraft = getArguments().getBoolean(ARGS_DRAFT, false);
+        boolean notDraft = getArguments().getBoolean(ARGS_NOTDRAFT, false);
 
         if(savedInstanceState != null) {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
@@ -54,8 +56,19 @@ public class TaskListFragment extends Fragment {
         }
         ;
         if(hasDraft){
-            Snackbar.make(container, R.string.draft_snack_label, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.draft_snack_action, new View.OnClickListener() {
+            int snack_label;
+            int snack_action;
+
+            if(notDraft){
+                snack_label = R.string.undo_snack_label;
+                snack_action = R.string.undo_snack_action;
+            }else{
+                snack_label = R.string.draft_snack_label;
+                snack_action = R.string.draft_snack_action;
+            }
+
+            Snackbar.make(container, snack_label, Snackbar.LENGTH_LONG)
+                    .setAction(snack_action, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             updateUI(true);
@@ -219,10 +232,11 @@ public class TaskListFragment extends Fragment {
         }
     }
 
-    public static TaskListFragment newInstance(boolean hasDraft, Task saveTask){
+    public static TaskListFragment newInstance(boolean hasDraft, Task saveTask, boolean notDraft){
         Bundle args = new Bundle();
         args.putSerializable(ARGS_DRAFT, hasDraft);
         args.putParcelable(ARGS_SAVETASK, saveTask);
+        args.putBoolean(ARGS_NOTDRAFT, notDraft);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;

@@ -44,19 +44,6 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
     private static int back_counter = 0;
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.delete_task:
-                TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
-                Intent intent = TaskListActivity.newIntent(getActivity(), false,null);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
    @Override
     public void onBackPressed() {
        if (back_counter == 0) {
@@ -73,7 +60,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
     }
 
     private void backPressIntent(boolean hasDraft, Task task) {
-        Intent intent = TaskListActivity.newIntent(getActivity(), hasDraft,task);
+        Intent intent = TaskListActivity.newIntent(getActivity(), hasDraft,task,false);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();
@@ -270,8 +257,9 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() ==  R.id.delete_task) {
+                            Task saveTask = mTask;
                             TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
-                            Intent intent = TaskListActivity.newIntent(getActivity(), false, null);
+                            Intent intent = TaskListActivity.newIntent(getActivity(), true, saveTask, true);
                             startActivity(intent);
                             return true;
                         }
