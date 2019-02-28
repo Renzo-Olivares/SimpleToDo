@@ -68,7 +68,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_task,menu);
+        inflater.inflate(R.menu.fragment_task, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

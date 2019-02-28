@@ -3,7 +3,6 @@ To Do:
     Priority scale (1-5)
 - Add timer indicator to indicate task approaching deadline on list item view (3)
 - add placeholder when empty recyclerview (5)
-- when delete task, implement snackbar to undo / recover draft snackbar(5)
 - fix up styles (5)
 - implement dark mode (toggle by night mode setting from android and user facing toggle) (2)
 - app launch screen and app icon(5)
