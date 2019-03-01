@@ -43,7 +43,6 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
     private static final int REQUEST_TIME = 1;
     private static int back_counter = 0;
 
-
    @Override
     public void onBackPressed() {
        if (back_counter == 0) {

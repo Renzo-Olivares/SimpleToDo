@@ -35,12 +35,12 @@ public class TaskListFragment extends Fragment {
     private int mAdapterPosition = -1;
     private UUID taskid;
 
+
     @Override
     public void onResume() {
         super.onResume();
         updateUI(false);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,8 +54,21 @@ public class TaskListFragment extends Fragment {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
             taskid = (UUID) savedInstanceState.getSerializable(EXTRA_TASKID);
         }
-        ;
+
+
         if(hasDraft){
+
+            List<Task> mTasks = TaskManager.get(getActivity()).getTasks();
+            Task tempTask = getArguments().getParcelable(ARGS_SAVETASK);
+            boolean stopSnack = false;
+
+            for(int i = 0; i < mTasks.size(); i++){
+                if(mTasks.get(i).getTaskId().equals(tempTask.getTaskId())){
+                    //if task is found then prevent snackbar
+                    stopSnack =  true;
+                }
+            }
+
             int snack_label;
             int snack_action;
 
@@ -67,17 +80,19 @@ public class TaskListFragment extends Fragment {
                 snack_action = R.string.draft_snack_action;
             }
 
-            Snackbar.make(container, snack_label, Snackbar.LENGTH_LONG)
-                    .setAction(snack_action, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            updateUI(true);
-                            Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
-                            TaskManager.get(getActivity()).addTask(saveTask);
-                            mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
-                            updateUI(false);
-                        }
-                    }).show();
+            if(!stopSnack){
+                Snackbar.make(container, snack_label, Snackbar.LENGTH_LONG)
+                        .setAction(snack_action, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateUI(true);
+                                Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
+                                TaskManager.get(getActivity()).addTask(saveTask);
+                                mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
+                                updateUI(false);
+                            }
+                        }).show();
+            }
         }
 
         mTaskRecycler = v.findViewById(R.id.task_recycler);
