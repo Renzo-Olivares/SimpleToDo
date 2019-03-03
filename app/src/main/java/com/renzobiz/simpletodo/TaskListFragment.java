@@ -1,10 +1,14 @@
 package com.renzobiz.simpletodo;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -13,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -38,6 +45,13 @@ public class TaskListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI(false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        initNightMode();
     }
 
     @Override
@@ -142,6 +156,46 @@ public class TaskListFragment extends Fragment {
         mTaskRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI(false);
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_task_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.dark_mode:
+                int currentNightMode = getCurrentNightMode();
+                alternateNightMode(currentNightMode);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private int getCurrentNightMode() {
+        return getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+    }
+
+    private void alternateNightMode(int currentNightMode) {
+        int newNightMode;
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            newNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+        } else {
+            newNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+        }
+
+        SharedPreferences.setPrefDarkMode(getActivity(),newNightMode);
+        getActivity().recreate();
+    }
+
+    private void initNightMode() {
+        int nightMode = SharedPreferences.getStoredPrefDarkMode(getActivity());
+        AppCompatDelegate.setDefaultNightMode(nightMode);
     }
 
     private void updateUI(boolean newAdapter){

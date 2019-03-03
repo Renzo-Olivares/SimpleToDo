@@ -10,4 +10,5 @@
     <string name="draft_snack_label">Your draft was not saved!</string>
     <string name="draft_snack_action">Save</string>
     <string name="undo_snack_action">Undo</string>
+    <string name="dark_mode">Enable Dark Mode</string>
 </resources>
