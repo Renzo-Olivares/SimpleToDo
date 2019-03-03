@@ -19,5 +19,5 @@ ideas:
 - I want to avoid having a settings page, why? to keep things as minimal as possible.
 
 Bugs:
--stop snackbar from displaying again after rotation in all situations
 -edittext title allows for blankspace prevent this, only fill one line
+- return the list in the same order everytime

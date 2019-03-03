@@ -120,7 +120,7 @@ public class TaskListFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 TaskManager.get(getActivity()).addTask(saveTask);
-                                mAdapter.restoreItem(saveTask, deletedPosition);
+                                mAdapter.restoreItem(saveTask, mAdapter.getItemCount());
                             }
                         }).show();
             }
