@@ -18,13 +18,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.List;
-import java.util.UUID;
 
 import static java.text.DateFormat.FULL;
 
 public class TaskListFragment extends Fragment {
     private static final String EXTRA_POSITION = "com.renzobiz.android.simpletodo.adapterposition";
-    private static final String EXTRA_TASKID = "com.renzobiz.android.simpletodo.taskid";
     private static final String ARGS_DRAFT = "has_draft";
     private static final String ARGS_SAVETASK = "save_task";
     private static final String ARGS_NOTDRAFT = "not_draft";
@@ -32,8 +30,8 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mTaskRecycler;
     private FloatingActionButton mFloatingActionButton;
     private TaskAdapter mAdapter;
+    private static boolean stopSnack;
     private int mAdapterPosition = -1;
-    private UUID taskid;
 
 
     @Override
@@ -49,18 +47,14 @@ public class TaskListFragment extends Fragment {
 
         boolean hasDraft = getArguments().getBoolean(ARGS_DRAFT, false);
         boolean notDraft = getArguments().getBoolean(ARGS_NOTDRAFT, false);
-
         if(savedInstanceState != null) {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
-            taskid = (UUID) savedInstanceState.getSerializable(EXTRA_TASKID);
         }
 
 
         if(hasDraft){
-
             List<Task> mTasks = TaskManager.get(getActivity()).getTasks();
             Task tempTask = getArguments().getParcelable(ARGS_SAVETASK);
-            boolean stopSnack = false;
 
             for(int i = 0; i < mTasks.size(); i++){
                 if(mTasks.get(i).getTaskId().equals(tempTask.getTaskId())){
@@ -85,13 +79,20 @@ public class TaskListFragment extends Fragment {
                         .setAction(snack_action, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                updateUI(true);
+                                //updateUI(true);
                                 Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
                                 TaskManager.get(getActivity()).addTask(saveTask);
                                 mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
                                 updateUI(false);
                             }
-                        }).show();
+                        }).addCallback(new Snackbar.Callback(){
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        //prevent snackbar from appearing after dissapears
+                        stopSnack =  true;
+                    }
+                }).show();
             }
         }
 
@@ -110,12 +111,9 @@ public class TaskListFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                 super.onSwiped(viewHolder, i);
                 //save task into temporary task for restore
-                final Task saveTask = TaskManager.get(getActivity()).getTask(taskid);
                 final int deletedPosition = viewHolder.getAdapterPosition();
+                final Task saveTask = mAdapter.removeItem(viewHolder.getAdapterPosition());
 
-                mAdapter.removeItem(viewHolder.getAdapterPosition());
-                TaskManager.get(getActivity()).deleteTask(taskid);
-                updateUI(true);
 
                 Snackbar.make(getView(), R.string.undo_snack_label, Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo_snack_action, new View.OnClickListener() {
@@ -123,7 +121,6 @@ public class TaskListFragment extends Fragment {
                             public void onClick(View v) {
                                 TaskManager.get(getActivity()).addTask(saveTask);
                                 mAdapter.restoreItem(saveTask, deletedPosition);
-                                updateUI(false);
                             }
                         }).show();
             }
@@ -135,6 +132,7 @@ public class TaskListFragment extends Fragment {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                stopSnack = false;
                 Intent intent = TaskPagerActivity.newIntent(getActivity(),null, false);
                 startActivity(intent);
                 updateUI(true);
@@ -172,6 +170,7 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
+            stopSnack = false;
             Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getTaskId(), true);
             startActivity(intent);
         }
@@ -203,7 +202,6 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(TaskHolder taskHolder, int position) {
             Task task = mTasks.get(position);
-            taskid = task.getTaskId();
             mAdapterPosition = position;
             taskHolder.bind(task);
         }
@@ -221,9 +219,12 @@ public class TaskListFragment extends Fragment {
             mTasks = tasks;
         }
 
-        public void removeItem(int position) {
+        public Task removeItem(int position) {
+            Task restoreTask = TaskManager.get(getActivity()).getTask(mTasks.get(position).getTaskId());
+            TaskManager.get(getActivity()).deleteTask(mTasks.get(position).getTaskId());
             mTasks.remove(position);
             notifyItemRemoved(position);
+            return restoreTask;
         }
 
         public void restoreItem(Task task, int position) {
@@ -236,7 +237,6 @@ public class TaskListFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(EXTRA_POSITION, mAdapterPosition);
-        outState.putSerializable(EXTRA_TASKID,taskid);
     }
 
     private void setUpToolbar(View view) {

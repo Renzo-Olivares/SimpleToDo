@@ -16,12 +16,12 @@ import android.view.View;
 
 abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
 
-    private Drawable deleteIcon;
-    private int intrinsicWidth;
-    private int intrinsicHeight;
-    private ColorDrawable background;
-    private int backgroundColor;
-    private Paint clearPaint;
+    private final Drawable deleteIcon;
+    private final int intrinsicWidth;
+    private final int intrinsicHeight;
+    private final ColorDrawable background;
+    private final int backgroundColor;
+    private final Paint clearPaint;
 
     public SwipeToDeleteCallback(Context context){
         super(0,ItemTouchHelper.LEFT);
@@ -36,7 +36,7 @@ abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        //
+
     }
 
     @Override
@@ -54,9 +54,9 @@ abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View itemView = viewHolder.itemView;
-        int itemHeight = itemView.getBottom() - itemView.getTop();
-        boolean isCanceled = dX == 0f && !isCurrentlyActive;
+        final View itemView = viewHolder.itemView;
+        final int itemHeight = itemView.getBottom() - itemView.getTop();
+        final boolean isCanceled = dX == 0f && !isCurrentlyActive;
 
         if(isCanceled){
             clearCanvas(c, itemView.getRight() + dX,(float) itemView.getTop(), (float)itemView.getRight(), (float)itemView.getBottom());
@@ -70,11 +70,11 @@ abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
         background.draw(c);
 
         //calculate position of delete icon
-        int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
-        int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
-        int deleteIconRight = itemView.getRight() - deleteIconMargin;
-        int deleteIconBottom = deleteIconTop + intrinsicHeight;
+        final int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+        final int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
+        final int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+        final int deleteIconRight = itemView.getRight() - deleteIconMargin;
+        final int deleteIconBottom = deleteIconTop + intrinsicHeight;
 
         //draw the delete icon
         deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
