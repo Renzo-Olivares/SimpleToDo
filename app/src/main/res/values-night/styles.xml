@@ -13,7 +13,7 @@
         <item tools:targetApi="23" name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="toolbar.theme" parent="Widget.AppCompat.Toolbar">
+    <style name="toolbar.theme" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:theme">@style/AppTheme</item>
         <item name="android:background">@color/matteDark</item>
     </style>

@@ -10,6 +10,7 @@ To Do:
     - multiple reminders (2)
 - Backup and restore db (5)
 - Launch activity, prompts to sign into google to restore, or restore from sdcard, or start new
+
 ideas:
 - if app has not launched in a while present welcome screen with upcoming tasks
 - pull down on list to reveal search
@@ -17,5 +18,8 @@ ideas:
 - I want to avoid having a settings page, why? to keep things as minimal as possible.
 
 Bugs:
-- edittext title allows for blankspace prevent this, only fill one line
-- return the list in the same order everytime
+- return the list in the same order everytime (related to sql database and temporary commit)
+- stop recyclerview scrolling when no items or less than 12 items are loaded
+
+other:
+implement room

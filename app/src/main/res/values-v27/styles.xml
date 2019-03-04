@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -12,7 +12,7 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="toolbar.theme" parent="Widget.AppCompat.Toolbar">
+    <style name="toolbar.theme" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">@android:color/white</item>
         <item name="android:theme">@style/AppTheme</item>
     </style>
