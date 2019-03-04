@@ -2,7 +2,6 @@
 To Do:
     Priority scale (1-5)
 - Fix picker dialogs and make rounded (5)
-- add placeholder when empty recyclerview (5)
 - Add timer indicator to indicate task approaching deadline on list item view (3)
 - app launch screen and app icon(5)
 - fragment task list toolbar should have night mode toggle on right, and back up and restore launch on the left side of title (2)
@@ -22,4 +21,5 @@ Bugs:
 - stop recyclerview scrolling when no items or less than 12 items are loaded
 
 other:
-implement room
+- implement room
+- clean up code.....

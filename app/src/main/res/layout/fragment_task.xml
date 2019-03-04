@@ -154,7 +154,6 @@
         app:layout_constraintHorizontal_bias="0.404"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/date_text_view" />
-    />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_button"
