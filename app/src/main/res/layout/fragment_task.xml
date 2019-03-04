@@ -15,6 +15,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/new_task_app_bar"
+            style="@style/toolbar.theme"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
             <TextView
@@ -27,6 +28,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/edit_task_app_bar"
+            style="@style/toolbar.theme"
             android:layout_width="match_parent"
             app:navigationIcon="@drawable/ic_up"
             android:layout_height="?attr/actionBarSize">

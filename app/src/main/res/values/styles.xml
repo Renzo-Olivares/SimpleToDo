@@ -8,5 +8,8 @@
         <item name="colorAccent">@android:color/holo_red_dark</item>
     </style>
 
-
+    <style name="toolbar.theme" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:theme">@style/AppTheme</item>
+    </style>
 </resources>
