@@ -35,6 +35,7 @@ public class TaskListFragment extends Fragment {
     private static final String ARGS_NOTDRAFT = "not_draft";
 
     private RecyclerView mTaskRecycler;
+    private TextView mRecyclerPlaceHolder;
     private FloatingActionButton mFloatingActionButton;
     private TaskAdapter mAdapter;
     private static boolean stopSnack;
@@ -112,6 +113,7 @@ public class TaskListFragment extends Fragment {
 
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
+        mRecyclerPlaceHolder = v.findViewById(R.id.recycler_placeholder);
 
         mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
@@ -128,6 +130,7 @@ public class TaskListFragment extends Fragment {
                 final int deletedPosition = viewHolder.getAdapterPosition();
                 final Task saveTask = mAdapter.removeItem(viewHolder.getAdapterPosition());
 
+                updateUI(false);
 
                 Snackbar.make(getView(), R.string.undo_snack_label, Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo_snack_action, new View.OnClickListener() {
@@ -135,6 +138,7 @@ public class TaskListFragment extends Fragment {
                             public void onClick(View v) {
                                 TaskManager.get(getActivity()).addTask(saveTask);
                                 mAdapter.restoreItem(saveTask, mAdapter.getItemCount());
+                                updateUI(false);
                             }
                         }).show();
             }
@@ -155,6 +159,7 @@ public class TaskListFragment extends Fragment {
 
         mTaskRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI(false);
+
         return v;
     }
 
@@ -201,6 +206,12 @@ public class TaskListFragment extends Fragment {
     private void updateUI(boolean newAdapter){
         TaskManager tm = TaskManager.get(getActivity());
         List<Task> tasks = tm.getTasks();
+
+        if(tasks.size() == 0){
+            mRecyclerPlaceHolder.setVisibility(View.VISIBLE);
+        }else{
+            mRecyclerPlaceHolder.setVisibility(View.GONE);
+        }
 
         if(mAdapter == null | newAdapter){
             mAdapter =  new TaskAdapter(tasks);
