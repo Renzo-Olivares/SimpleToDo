@@ -22,4 +22,4 @@ Bugs:
 
 other:
 - implement room
-- clean up code.....
+- clean up code.....(android lint warnings etc..)
