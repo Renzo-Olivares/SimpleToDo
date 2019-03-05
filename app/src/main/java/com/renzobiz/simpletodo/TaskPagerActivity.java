@@ -13,6 +13,7 @@ import android.view.View;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class TaskPagerActivity extends AppCompatActivity {
     private static final String EXTRA_TASKID = "com.renzobiz.android.simpletodo.taskid";
@@ -52,13 +53,19 @@ public class TaskPagerActivity extends AppCompatActivity {
 
         if (!getIntent().getBooleanExtra(EXTRA_TOOL, false)) {
             Task task = new Task();
-            TaskManager.get(this).addTask(task);
+            TaskManager.get(this).addAsync(task);
             taskID = task.getTaskId();
         }else{
             taskID = (UUID) getIntent().getSerializableExtra(EXTRA_TASKID);
         }
 
-        mTasks = TaskManager.get(this).getTasks();
+        try {
+            mTasks = TaskManager.get(this).getAllAsync();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         mTaskPager = findViewById(R.id.task_view_pager);
         FragmentManager fm = getSupportFragmentManager();
 

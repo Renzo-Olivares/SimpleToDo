@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static java.text.DateFormat.FULL;
 
@@ -68,7 +69,14 @@ public class TaskListFragment extends Fragment {
 
 
         if(hasDraft){
-            List<Task> mTasks = TaskManager.get(getActivity()).getTasks();
+            List<Task> mTasks = null;
+            try {
+                mTasks = TaskManager.get(getActivity()).getAllAsync();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Task tempTask = getArguments().getParcelable(ARGS_SAVETASK);
 
             for(int i = 0; i < mTasks.size(); i++){
@@ -96,7 +104,7 @@ public class TaskListFragment extends Fragment {
                             public void onClick(View v) {
                                 //updateUI(true);
                                 Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
-                                TaskManager.get(getActivity()).addTask(saveTask);
+                                TaskManager.get(getActivity()).addAsync(saveTask);
                                 mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
                                 updateUI(false);
                             }
@@ -136,7 +144,7 @@ public class TaskListFragment extends Fragment {
                         .setAction(R.string.undo_snack_action, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                TaskManager.get(getActivity()).addTask(saveTask);
+                                TaskManager.get(getActivity()).addAsync(saveTask);
                                 mAdapter.restoreItem(saveTask, mAdapter.getItemCount());
                                 updateUI(false);
                             }
@@ -205,7 +213,14 @@ public class TaskListFragment extends Fragment {
 
     private void updateUI(boolean newAdapter){
         TaskManager tm = TaskManager.get(getActivity());
-        List<Task> tasks = tm.getTasks();
+        List<Task> tasks = null;
+        try {
+            tasks = tm.getAllAsync();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         if(tasks.size() == 0){
             mRecyclerPlaceHolder.setVisibility(View.VISIBLE);
@@ -285,8 +300,15 @@ public class TaskListFragment extends Fragment {
         }
 
         public Task removeItem(int position) {
-            Task restoreTask = TaskManager.get(getActivity()).getTask(mTasks.get(position).getTaskId());
-            TaskManager.get(getActivity()).deleteTask(mTasks.get(position));
+            Task restoreTask = null;
+            try {
+                restoreTask = TaskManager.get(getActivity()).getTaskAsync(mTasks.get(position).getTaskId());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            TaskManager.get(getActivity()).deleteAsync(mTasks.get(position));
             mTasks.remove(position);
             notifyItemRemoved(position);
             return restoreTask;

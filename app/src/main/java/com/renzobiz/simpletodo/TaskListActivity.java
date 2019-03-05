@@ -25,6 +25,8 @@ public class TaskListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
+        TaskManager.get(this);
+
         boolean draftSnack = getIntent().getBooleanExtra(EXTRA_DRAFT, false);
         boolean undoSnack = getIntent().getBooleanExtra(EXTRA_NOTDRAFT, false);
 
