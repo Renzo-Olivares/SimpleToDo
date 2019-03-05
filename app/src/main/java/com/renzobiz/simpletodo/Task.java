@@ -6,11 +6,28 @@ import android.os.Parcelable;
 import java.util.Date;
 import java.util.UUID;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "task")
 public class Task implements Parcelable {
+    @ColumnInfo(name = "task_title")
     private String taskTitle;
+
+    @ColumnInfo(name = "task_details")
     private String taskDetails;
+
+    @ColumnInfo(name = "task_deadline")
     private Date taskDeadline;
+
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "taskid")
     private UUID taskId;
+
+
     boolean taskComplete;
 
     public boolean isTaskComplete() {
@@ -23,6 +40,10 @@ public class Task implements Parcelable {
 
     public UUID getTaskId() {
         return taskId;
+    }
+
+    public void setTaskId(UUID id) {
+        taskId = id;
     }
 
     public String getTaskTitle() {

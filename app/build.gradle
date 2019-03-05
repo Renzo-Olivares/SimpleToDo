@@ -28,4 +28,11 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    //room dependencies
+    def room_version = "2.1.0-alpha04"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    // Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 }

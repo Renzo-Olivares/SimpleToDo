@@ -49,7 +49,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
            if(!getArguments().getBoolean(ARGS_TOOL)){
                back_counter++;
                Task saveTask = mTask;
-               TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+               TaskManager.get(getActivity()).deleteTask(mTask);
                backPressIntent(true, saveTask);
            }else{
                back_counter++;
@@ -257,7 +257,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() ==  R.id.delete_task) {
                             Task saveTask = mTask;
-                            TaskManager.get(getActivity()).deleteTask(mTask.getTaskId());
+                            TaskManager.get(getActivity()).deleteTask(mTask);
                             Intent intent = TaskListActivity.newIntent(getActivity(), true, saveTask, true);
                             startActivity(intent);
                             return true;

@@ -286,7 +286,7 @@ public class TaskListFragment extends Fragment {
 
         public Task removeItem(int position) {
             Task restoreTask = TaskManager.get(getActivity()).getTask(mTasks.get(position).getTaskId());
-            TaskManager.get(getActivity()).deleteTask(mTasks.get(position).getTaskId());
+            TaskManager.get(getActivity()).deleteTask(mTasks.get(position));
             mTasks.remove(position);
             notifyItemRemoved(position);
             return restoreTask;
