@@ -27,15 +27,15 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "taskid")
     private UUID taskId;
 
+    @ColumnInfo(name = "reminders_enabled")
+    boolean remindersEnabled;
 
-    boolean taskComplete;
-
-    public boolean isTaskComplete() {
-        return taskComplete;
+    public boolean isRemindersEnabled() {
+        return remindersEnabled;
     }
 
-    public void setTaskComplete(boolean taskComplete) {
-        this.taskComplete = taskComplete;
+    public void setRemindersEnabled(boolean taskComplete) {
+        this.remindersEnabled = taskComplete;
     }
 
     public UUID getTaskId() {
@@ -77,12 +77,13 @@ public class Task implements Parcelable {
     public Task(UUID id){
         taskId = id;
         taskDeadline = new Date();
+        remindersEnabled = false;
     }
 
     public Task(Parcel source){
         taskTitle = source.readString();
         taskDetails = source.readString();
-        taskComplete = source.readByte() != 0;
+        remindersEnabled = source.readByte() != 0;
         taskDeadline = (Date) source.readSerializable();
         taskId = (UUID) source.readSerializable();
     }
@@ -96,7 +97,7 @@ public class Task implements Parcelable {
     public void writeToParcel(Parcel dest, int flags){
         dest.writeString(taskTitle);
         dest.writeString(taskDetails);
-        dest.writeByte((byte) (taskComplete ? 1:0));
+        dest.writeByte((byte) (remindersEnabled ? 1:0));
         dest.writeSerializable(taskDeadline);
         dest.writeSerializable(taskId);
     }

@@ -12,4 +12,5 @@
     <string name="undo_snack_action">Undo</string>
     <string name="dark_mode">Alternate Day/Night Mode</string>
     <string name="recycler_placeholder">You currently have no tasks.</string>
+    <string name="reminder_switch">Set Reminder</string>
 </resources>

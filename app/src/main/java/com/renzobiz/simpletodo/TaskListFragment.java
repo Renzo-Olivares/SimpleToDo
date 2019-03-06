@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.work.WorkManager;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,6 +75,7 @@ public class TaskListFragment extends Fragment {
 
         if(hasDraft){
             List<Task> mTasks = null;
+            final Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
             try {
                 mTasks = TaskManager.get(getActivity()).getAllAsync();
             } catch (ExecutionException e) {
@@ -106,7 +109,6 @@ public class TaskListFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 //updateUI(true);
-                                Task saveTask = getArguments().getParcelable(ARGS_SAVETASK);
                                 TaskManager.get(getActivity()).addAsync(saveTask);
                                 mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
                                 updateUI(false);
@@ -117,6 +119,7 @@ public class TaskListFragment extends Fragment {
                         super.onDismissed(transientBottomBar, event);
                         //prevent snackbar from appearing after dissapears
                         stopSnack =  true;
+                        WorkManager.getInstance().cancelAllWorkByTag(saveTask.getTaskTitle().toUpperCase().replace(" ", "_"));
                     }
                 }).show();
             }
@@ -151,7 +154,13 @@ public class TaskListFragment extends Fragment {
                                 mAdapter.restoreItem(saveTask, mAdapter.getItemCount());
                                 updateUI(false);
                             }
-                        }).show();
+                        }).addCallback(new Snackbar.Callback(){
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        WorkManager.getInstance().cancelAllWorkByTag(saveTask.getTaskTitle().toUpperCase().replace(" ", "_"));
+                    }
+                }).show();
             }
         };
 
@@ -284,6 +293,7 @@ public class TaskListFragment extends Fragment {
             String date = DateFormat.getDateInstance(FULL).format(task.getTaskDeadline());
             mTaskTitle.setText(mTask.getTaskTitle());
             mTaskDate.setText(date);
+            mTaskDate.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
         }
     }
 

@@ -4,19 +4,30 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.button.MaterialButton;
+
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import android.text.Editable;
 import android.text.TextWatcher;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -24,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import static java.text.DateFormat.FULL;
 import static java.text.DateFormat.SHORT;
@@ -33,6 +45,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
     private EditText mTaskDetails;
     private TextView mDueDateText;
     private TextView mDueTimeText;
+    private CardView mCardReminder;
+    private Switch mReminderSwitch;
     private Task mTask;
     private Date mMasterDate;
     private MaterialButton mSaveButton;
@@ -50,13 +64,35 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
            if(!getArguments().getBoolean(ARGS_TOOL)){
                back_counter++;
                Task saveTask = mTask;
+               if(mTask.isRemindersEnabled() && remindHasChanged()){
+                   createWork();
+               }
                TaskManager.get(getActivity()).deleteAsync(mTask);
                backPressIntent(true, saveTask);
            }else{
                back_counter++;
+               if(mTask.isRemindersEnabled() && remindHasChanged()){
+                   createWork();
+               }
                backPressIntent(false,null);
            }
        }
+    }
+
+    private boolean remindHasChanged() {
+       boolean isReminderChanged;
+       long originTime = mMasterDate.getTime();
+       long newTime = mTask.getTaskDeadline().getTime();
+
+       if(newTime ==  originTime){
+           isReminderChanged = false;
+       }else if(newTime > originTime){
+           isReminderChanged = (newTime > new Date().getTime())? true:false;
+       }else{
+           isReminderChanged = (newTime > new Date().getTime()? true:false);
+       }
+
+       return isReminderChanged;
     }
 
     private void backPressIntent(boolean hasDraft, Task task) {
@@ -85,6 +121,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        mMasterDate = mTask.getTaskDeadline();
         setHasOptionsMenu(getArguments().getBoolean(ARGS_TOOL));
     }
 
@@ -104,13 +142,16 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         mDueDateText = v.findViewById(R.id.date_text_view);
         mDueTimeText = v.findViewById(R.id.due_time_text_view);
         mSaveButton = v.findViewById(R.id.save_button);
-
-        mMasterDate = mTask.getTaskDeadline();
+        mCardReminder = v.findViewById(R.id.cardView);
+        mReminderSwitch = v.findViewById(R.id.switchReminder);
 
         if(!getArguments().getBoolean(ARGS_TOOL)){
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(mTask.isRemindersEnabled() && remindHasChanged()){
+                        createWork();
+                    }
                     backPressIntent(false,null);
                 }
             });
@@ -118,6 +159,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         else{
             mSaveButton.setVisibility(View.GONE);
         }
+
+        mCardReminder.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
 
         mTaskTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -154,8 +197,6 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
             }
         });
 
-
-
         updateDate();
 
         mDueDateText.setOnClickListener(new View.OnClickListener() {
@@ -178,10 +219,49 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
             }
         });
 
+        mReminderSwitch.setChecked(mTask.isRemindersEnabled());
+        mReminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    mCardReminder.setVisibility(View.VISIBLE);
+                    mTask.setRemindersEnabled(b);
+                }else{
+                    mCardReminder.setVisibility(View.INVISIBLE);
+                    mTask.setRemindersEnabled(b);
+                }
+            }
+        });
+
         mTaskTitle.setText(mTask.getTaskTitle());
         mTaskDetails.setText(mTask.getTaskDetails());
 
         return v;
+    }
+
+    private void createWork() {
+        String TAG_NOTIFICATIONS = mTask.getTaskTitle().toUpperCase().replace(" ", "_");
+
+        Data data = new Data.Builder()
+                .putString(NotificationWorker.EXTRA_TITLE, mTask.getTaskTitle())
+                .putString(NotificationWorker.EXTRA_ID, mTask.getTaskId().toString())
+                .build();
+
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInitialDelay(calculateDelay(mTask.getTaskDeadline()), TimeUnit.MILLISECONDS)
+                .setInputData(data)
+                .addTag(TAG_NOTIFICATIONS)
+                .build();
+
+        WorkManager.getInstance().enqueueUniqueWork(TAG_NOTIFICATIONS, ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+    }
+
+    private long calculateDelay(Date taskDeadline) {
+       long targetMili = taskDeadline.getTime();
+       long initialMili = new Date().getTime();
+       long delayMili = targetMili - initialMili;
+
+       return delayMili;
     }
 
     @Override
@@ -195,27 +275,27 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                 Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
                 Calendar calendar = setupCalendar(date);
 
-                Calendar cal = setupCalendar(mMasterDate);
+                Calendar cal = setupCalendar(mTask.getTaskDeadline());
                 cal.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
                 cal.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
                 cal.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
 
                 Date newDate = cal.getTime();
                 mTask.setTaskDeadline(newDate);
-                updateDate(cal);
+                updateDate();
                 break;
             case REQUEST_TIME:
                 Date dateTime = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
                 Calendar timeCalendar = setupCalendar(dateTime);
 
-                Calendar time = setupCalendar(mMasterDate);
+                Calendar time = setupCalendar(mTask.getTaskDeadline());
                 time.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
                 time.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
 
                 Date newTime = time.getTime();
 
                 mTask.setTaskDeadline(newTime);
-                updateDate(time);
+                updateDate();
                 break;
             default:
                 super.onActivityResult(requestCode,resultCode,data);
@@ -227,12 +307,6 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         calendar.setTime(date);
 
         return calendar;
-    }
-
-    private void updateDate(Calendar cal) {
-        mDueDateText.setText(DateFormat.getDateInstance(FULL).format(mTask.getTaskDeadline()));
-        mDueTimeText.setText(DateFormat.getTimeInstance(SHORT).format(mTask.getTaskDeadline()));
-        mMasterDate = cal.getTime();
     }
 
     private void updateDate(){
@@ -275,6 +349,9 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                 toolbarEdit.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if(mTask.isRemindersEnabled() && remindHasChanged()){
+                            createWork();
+                        }
                         getActivity().onNavigateUp();
                     }
                 });
