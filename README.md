@@ -21,5 +21,5 @@ Bugs:
 - stop recyclerview scrolling when no items or less than 12 items are loaded
 
 other:
-- implement room
 - clean up code.....(android lint warnings etc..)
+- mvvm

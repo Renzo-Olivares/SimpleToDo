@@ -42,6 +42,8 @@ public class TaskListFragment extends Fragment {
     private static boolean stopSnack;
     private int mAdapterPosition = -1;
 
+    private LinearLayoutManager linearLay;
+
 
     @Override
     public void onResume() {
@@ -63,6 +65,7 @@ public class TaskListFragment extends Fragment {
 
         boolean hasDraft = getArguments().getBoolean(ARGS_DRAFT, false);
         boolean notDraft = getArguments().getBoolean(ARGS_NOTDRAFT, false);
+
         if(savedInstanceState != null) {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
         }
@@ -165,8 +168,21 @@ public class TaskListFragment extends Fragment {
             }
         });
 
-        mTaskRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        linearLay = new LinearLayoutManager(getActivity());
+        mTaskRecycler.setLayoutManager(linearLay);
+        mTaskRecycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
         updateUI(false);
+
+        mTaskRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                boolean notAllVisible = linearLay.findLastCompletelyVisibleItemPosition() < mAdapter.getItemCount() - 1;
+                if (notAllVisible) {
+                    mTaskRecycler.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+                }
+            }
+        });
 
         return v;
     }
@@ -222,6 +238,8 @@ public class TaskListFragment extends Fragment {
             e.printStackTrace();
         }
 
+        mTaskRecycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
         if(tasks.size() == 0){
             mRecyclerPlaceHolder.setVisibility(View.VISIBLE);
         }else{
@@ -240,7 +258,6 @@ public class TaskListFragment extends Fragment {
             }
             mAdapter.setTasks(tasks);
         }
-
     }
 
     private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
