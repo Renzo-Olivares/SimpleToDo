@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class TaskListFragment extends Fragment {
     private static final String ARGS_DRAFT = "has_draft";
     private static final String ARGS_SAVETASK = "save_task";
     private static final String ARGS_NOTDRAFT = "not_draft";
+    private static final String DIALOG_BACKUP_RESTORE = "DialogBackupRestore";
 
     private RecyclerView mTaskRecycler;
     private TextView mRecyclerPlaceHolder;
@@ -358,6 +360,14 @@ public class TaskListFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             activity.setSupportActionBar(toolbar);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentManager manager = getFragmentManager();
+                    BackupRestoreFragment brDialog = new BackupRestoreFragment();
+                    brDialog.show(manager, DIALOG_BACKUP_RESTORE);
+                }
+            });
         }
     }
 

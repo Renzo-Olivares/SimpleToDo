@@ -18,4 +18,9 @@
         <item name="android:background">@color/matteDark</item>
     </style>
 
+    <style name="backup.dialog.theme" parent ="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/matteDark</item>
+    </style>
+
 </resources>

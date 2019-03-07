@@ -34,9 +34,8 @@ public class TimePickerFragment extends DialogFragment {
         mTimePicker.setCurrentHour(hour);
         mTimePicker.setCurrentMinute(minute);
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getActivity(), R.style.dialog_theme)
                 .setView(v)
-                .setTitle(R.string.time_picker_title)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

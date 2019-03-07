@@ -16,5 +16,4 @@
         <item name="android:background">@android:color/white</item>
         <item name="android:theme">@style/AppTheme</item>
     </style>
-
 </resources>

@@ -18,13 +18,13 @@
             android:id="@+id/app_bar"
             style="@style/toolbar.theme"
             android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_backup_restore"
             android:layout_height="?attr/actionBarSize">
             <TextView
+                style="@style/textview.title.theme"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="@string/app_name"
-                android:textSize="24sp"
-                android:gravity="center"/>
+                android:text="@string/task_list_title"/>
 
         </androidx.appcompat.widget.Toolbar>
 

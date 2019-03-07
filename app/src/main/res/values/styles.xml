@@ -12,4 +12,18 @@
         <item name="android:background">@android:color/white</item>
         <item name="android:theme">@style/AppTheme</item>
     </style>
+
+    <style name="textview.title.theme" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:layout_marginLeft">?android:attr/actionBarSize</item>
+        <item name="android:layout_marginRight">?android:attr/actionBarSize</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="dialog.theme" parent ="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="backup.dialog.theme" parent ="Theme.MaterialComponents.DayNight.Dialog">
+    </style>
 </resources>

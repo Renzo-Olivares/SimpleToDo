@@ -13,4 +13,9 @@
     <string name="dark_mode">Alternate Day/Night Mode</string>
     <string name="recycler_placeholder">You currently have no tasks.</string>
     <string name="reminder_switch">Set Reminder</string>
+    <string name="backup_restore_sub">Backup and Restore Menu</string>
+    <string name="backup_restore_dialog_title">Backup and Restore</string>
+    <string name="backup_button_label">Backup</string>
+    <string name="restore_button_label">Restore</string>
+    <string name="task_list_title">My Tasks</string>
 </resources>

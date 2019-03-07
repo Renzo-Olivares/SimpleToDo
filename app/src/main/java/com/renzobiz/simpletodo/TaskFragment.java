@@ -25,10 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -43,8 +43,8 @@ import static java.text.DateFormat.SHORT;
 public class TaskFragment extends Fragment implements IOnBackPressed{
     private EditText mTaskTitle;
     private EditText mTaskDetails;
-    private TextView mDueDateText;
-    private TextView mDueTimeText;
+    private Button mDueDateText;
+    private Button mDueTimeText;
     private CardView mCardReminder;
     private Switch mReminderSwitch;
     private Task mTask;
@@ -139,8 +139,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
         setUpToolbar(v, tool);
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
-        mDueDateText = v.findViewById(R.id.date_text_view);
-        mDueTimeText = v.findViewById(R.id.due_time_text_view);
+        mDueDateText = v.findViewById(R.id.date_button);
+        mDueTimeText = v.findViewById(R.id.time_button);
         mSaveButton = v.findViewById(R.id.save_button);
         mCardReminder = v.findViewById(R.id.cardView);
         mReminderSwitch = v.findViewById(R.id.switchReminder);
