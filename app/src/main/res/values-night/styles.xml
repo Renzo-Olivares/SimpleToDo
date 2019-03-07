@@ -4,9 +4,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/holo_red_dark</item>
-        <item name="colorPrimaryDark">@android:color/holo_red_dark</item>
-        <item name="colorAccent">@android:color/holo_red_dark</item>
         <item tools:targetApi="21" name="android:navigationBarColor">@color/matteDark</item>
         <item tools:targetApi="21" name="android:statusBarColor">@color/matteDark</item>
         <item tools:targetApi="27" name="android:windowLightNavigationBar">false</item>
@@ -21,6 +18,7 @@
     <style name="backup.dialog.theme" parent ="Theme.MaterialComponents.DayNight.Dialog">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:background">@color/matteDark</item>
+        <item name="android:dialogCornerRadius">8dp</item>
     </style>
 
 </resources>

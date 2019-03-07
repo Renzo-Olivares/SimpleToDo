@@ -1,11 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/holo_red_dark</item>
-        <item name="colorPrimaryDark">@android:color/holo_red_dark</item>
-        <item name="colorAccent">@android:color/holo_red_dark</item>
     </style>
 
     <style name="toolbar.theme" parent="Widget.MaterialComponents.Toolbar">
@@ -25,5 +22,6 @@
     </style>
 
     <style name="backup.dialog.theme" parent ="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:dialogCornerRadius">8dp</item>
     </style>
 </resources>
