@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

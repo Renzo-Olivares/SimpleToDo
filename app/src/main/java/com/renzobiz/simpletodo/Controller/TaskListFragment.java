@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -6,6 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.renzobiz.simpletodo.Controller.Helpers.SwipeToDeleteCallback;
+import com.renzobiz.simpletodo.Model.Task;
+import com.renzobiz.simpletodo.Model.TaskManager;
+import com.renzobiz.simpletodo.R;
+import com.renzobiz.simpletodo.SharedPreferences;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;

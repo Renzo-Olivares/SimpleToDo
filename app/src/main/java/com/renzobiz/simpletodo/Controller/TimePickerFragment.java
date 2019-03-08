@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
+
+import com.renzobiz.simpletodo.R;
 
 import java.util.Calendar;
 import java.util.Date;

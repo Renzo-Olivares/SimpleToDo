@@ -1,6 +1,8 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Database;
 
 import android.content.Context;
+
+import com.renzobiz.simpletodo.Model.Task;
 
 import androidx.room.Database;
 import androidx.room.Room;

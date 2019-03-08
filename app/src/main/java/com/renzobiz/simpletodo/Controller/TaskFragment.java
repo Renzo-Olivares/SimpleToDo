@@ -1,9 +1,14 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.button.MaterialButton;
+import com.renzobiz.simpletodo.Controller.Helpers.IOnBackPressed;
+import com.renzobiz.simpletodo.Model.Task;
+import com.renzobiz.simpletodo.Model.TaskManager;
+import com.renzobiz.simpletodo.R;
+import com.renzobiz.simpletodo.Worker.NotificationWorker;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -40,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 import static java.text.DateFormat.FULL;
 import static java.text.DateFormat.SHORT;
 
-public class TaskFragment extends Fragment implements IOnBackPressed{
+public class TaskFragment extends Fragment implements IOnBackPressed {
     private EditText mTaskTitle;
     private EditText mTaskDetails;
     private Button mDueDateText;
@@ -96,7 +101,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
     }
 
     private void backPressIntent(boolean hasDraft, Task task) {
-        Intent intent = TaskListActivity.newIntent(getActivity(), hasDraft,task,false);
+        Intent intent = TaskListActivity.newIntent(getActivity(), hasDraft, task ,false);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         getActivity().finish();

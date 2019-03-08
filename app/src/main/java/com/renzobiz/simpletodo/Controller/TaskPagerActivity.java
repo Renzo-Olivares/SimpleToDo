@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.renzobiz.simpletodo.Model.Task;
+import com.renzobiz.simpletodo.Model.TaskManager;
+import com.renzobiz.simpletodo.R;
 
 import java.util.List;
 import java.util.UUID;

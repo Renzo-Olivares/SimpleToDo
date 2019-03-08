@@ -1,4 +1,6 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Database;
+
+import com.renzobiz.simpletodo.Model.Task;
 
 import java.util.List;
 import java.util.UUID;

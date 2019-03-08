@@ -13,10 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TaskPagerActivity"
-            android:parentActivityName=".TaskListActivity">
+        <activity android:name=".Controller.TaskPagerActivity"
+            android:parentActivityName=".Controller.TaskListActivity">
         </activity>
-        <activity android:name=".TaskListActivity">
+        <activity android:name=".Controller.TaskListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

@@ -4,6 +4,6 @@
     android:id="@+id/task_view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TaskPagerActivity">
+    tools:context=".Controller.TaskPagerActivity">
 
 </androidx.viewpager.widget.ViewPager>

@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Worker;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+
+import com.renzobiz.simpletodo.Controller.TaskPagerActivity;
+import com.renzobiz.simpletodo.R;
 
 import java.util.UUID;
 

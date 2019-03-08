@@ -1,7 +1,9 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Model;
 
 import android.os.AsyncTask;
 import android.content.Context;
+
+import com.renzobiz.simpletodo.Database.TaskDataBase;
 
 import java.util.List;
 import java.util.UUID;

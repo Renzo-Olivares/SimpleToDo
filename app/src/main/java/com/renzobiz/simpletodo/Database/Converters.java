@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Database;
 
 import java.util.Date;
 import java.util.UUID;

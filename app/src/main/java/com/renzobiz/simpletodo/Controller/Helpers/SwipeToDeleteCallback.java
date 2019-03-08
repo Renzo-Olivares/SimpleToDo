@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller.Helpers;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 
-abstract class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
+import com.renzobiz.simpletodo.R;
+
+abstract public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback{
 
     private final Drawable deleteIcon;
     private final int intrinsicWidth;

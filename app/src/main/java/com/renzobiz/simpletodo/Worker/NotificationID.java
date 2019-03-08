@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Worker;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

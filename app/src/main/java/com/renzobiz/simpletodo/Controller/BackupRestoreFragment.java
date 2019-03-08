@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.renzobiz.simpletodo.R;
+import com.renzobiz.simpletodo.Database.TaskDataBase;
 
 import java.io.File;
 import java.io.FileInputStream;

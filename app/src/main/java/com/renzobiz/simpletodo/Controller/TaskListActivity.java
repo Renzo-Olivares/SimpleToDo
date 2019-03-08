@@ -1,4 +1,4 @@
-package com.renzobiz.simpletodo;
+package com.renzobiz.simpletodo.Controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.renzobiz.simpletodo.Model.Task;
+import com.renzobiz.simpletodo.Model.TaskManager;
+import com.renzobiz.simpletodo.R;
 
 public class TaskListActivity extends AppCompatActivity {
     private static final String EXTRA_DRAFT= "com.renzobiz.android.simpletodo.hasdraft";
