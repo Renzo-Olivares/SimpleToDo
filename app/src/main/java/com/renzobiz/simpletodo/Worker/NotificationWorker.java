@@ -46,7 +46,7 @@ public class NotificationWorker extends Worker {
         // Create the NotificationChannel on Android O and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //define the importance level of the notification
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
 
             //build the channel, giving it a unique ID and name
             NotificationChannel channel =
@@ -87,7 +87,7 @@ public class NotificationWorker extends Worker {
                         .setContentText(notificationText)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         //trigger notification
         NotificationManagerCompat notificationManager =
