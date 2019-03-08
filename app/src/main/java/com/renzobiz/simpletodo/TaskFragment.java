@@ -333,6 +333,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                 activity.setSupportActionBar(toolbarEdit);
                 toolbarNew.setVisibility(View.GONE);
                 toolbarEdit.inflateMenu(R.menu.fragment_task);//changed
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 toolbarEdit.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -352,7 +353,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed{
                         if(mTask.isRemindersEnabled() && remindHasChanged()){
                             createWork();
                         }
-                        getActivity().onNavigateUp();
+                        getActivity().onBackPressed();
                     }
                 });
             }
