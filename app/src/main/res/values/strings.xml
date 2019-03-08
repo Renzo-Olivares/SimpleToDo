@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleToDo</string>
+    <string name="app_name">Tasks</string>
     <string name="new_task_toolbar_title">New Task</string>
     <string name="edit_task_toolbar_title">Edit Task</string>
     <string name="save_button_label">Save</string>
