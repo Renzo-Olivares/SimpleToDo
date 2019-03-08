@@ -8,6 +8,7 @@ import java.util.UUID;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -21,13 +22,9 @@ public interface TaskDao {
     @Query("SELECT * FROM task where taskid LIKE  :taskid ")
     Task findById(UUID taskid);
 
-    //number of tasks
-    @Query("SELECT COUNT(*) from task")
-    int countTasks();
-
     //insert all
-    @Insert
-    void insertAll(Task... tasks);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void updateAll(List<Task> tasks);
 
     //insert one
     @Insert

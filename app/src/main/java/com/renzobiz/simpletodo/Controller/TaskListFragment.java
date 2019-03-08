@@ -50,6 +50,7 @@ public class TaskListFragment extends Fragment {
     private FloatingActionButton mFloatingActionButton;
     private TaskAdapter mAdapter;
     private static boolean stopSnack;
+    private static int mdeletedPosition;
     private int mAdapterPosition = -1;
 
     private LinearLayoutManager linearLay;
@@ -74,7 +75,7 @@ public class TaskListFragment extends Fragment {
         setUpToolbar(v);
 
         boolean hasDraft = getArguments().getBoolean(ARGS_DRAFT, false);
-        boolean notDraft = getArguments().getBoolean(ARGS_NOTDRAFT, false);
+        final boolean notDraft = getArguments().getBoolean(ARGS_NOTDRAFT, false);
 
         if(savedInstanceState != null) {
             mAdapterPosition = savedInstanceState.getInt(EXTRA_POSITION, -1);
@@ -116,9 +117,11 @@ public class TaskListFragment extends Fragment {
                         .setAction(snack_action, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //updateUI(true);
-                                TaskManager.get(getActivity()).addAsync(saveTask);
-                                mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
+                                if(notDraft){
+                                    mAdapter.restoreItem(saveTask, (mdeletedPosition));
+                                }else{
+                                    mAdapter.restoreItem(saveTask, (mAdapterPosition + 1));
+                                }
                                 updateUI(false);
                             }
                         }).addCallback(new Snackbar.Callback(){
@@ -156,8 +159,7 @@ public class TaskListFragment extends Fragment {
                         .setAction(R.string.undo_snack_action, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                TaskManager.get(getActivity()).addAsync(saveTask);
-                                mAdapter.restoreItem(saveTask, mAdapter.getItemCount());
+                                mAdapter.restoreItem(saveTask, deletedPosition);
                                 updateUI(false);
                             }
                         }).addCallback(new Snackbar.Callback(){
@@ -285,6 +287,7 @@ public class TaskListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
+            mdeletedPosition = getAdapterPosition();
             stopSnack = false;
             Intent intent = TaskPagerActivity.newIntent(getActivity(), mTask.getTaskId(), true);
             startActivity(intent);
@@ -352,6 +355,7 @@ public class TaskListFragment extends Fragment {
 
         public void restoreItem(Task task, int position) {
             mTasks.add(position, task);
+            TaskManager.get(getActivity()).updateAllAsync(mTasks);
             notifyItemInserted(position);
         }
     }

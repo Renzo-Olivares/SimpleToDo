@@ -34,6 +34,15 @@ public class TaskManager {
         addTask.execute();
     }
 
+    private static void updateAllTasks(List<Task> tasks){
+        taskDataBase.taskDao().updateAll(tasks);
+    }
+
+    public void updateAllAsync(List<Task> tasks){
+        MassUpdateAsync updateAll = new MassUpdateAsync(tasks);
+        updateAll.execute();
+    }
+
     private static void deleteTask(Task task){
         taskDataBase.taskDao().delete(task);
     }
@@ -88,6 +97,22 @@ public class TaskManager {
         protected Void doInBackground(final Void... params) {
             //everything must run in here or else...
             updateTask(mTask);
+            return null;
+        }
+
+    }
+
+    private static class MassUpdateAsync extends AsyncTask<Void, Void, Void> {
+        private final List<Task> mTasks;
+
+        MassUpdateAsync(List<Task> tasks) {
+            mTasks = tasks;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            //everything must run in here or else...
+            updateAllTasks(mTasks);
             return null;
         }
 

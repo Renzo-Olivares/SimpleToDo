@@ -12,7 +12,6 @@ ideas:
 - Add timer indicator to indicate task approaching deadline on list item view (3)
 
 Bugs:
-- return the list in the same order everytime (related to sql database and temporary commit)
 - fix restore db, and create a directory for this app backups on external (task-database shm)
 
 other:
