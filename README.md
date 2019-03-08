@@ -14,7 +14,6 @@ ideas:
 Bugs:
 - return the list in the same order everytime (related to sql database and temporary commit)
 - fix restore db, and create a directory for this app backups on external (task-database shm)
-- list view decoration on one item
 
 other:
 - clean up code.....(android lint warnings etc..)
