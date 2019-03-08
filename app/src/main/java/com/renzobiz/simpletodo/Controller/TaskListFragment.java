@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.renzobiz.simpletodo.Controller.Helpers.ListSeperatorDecoration;
 import com.renzobiz.simpletodo.Controller.Helpers.SwipeToDeleteCallback;
 import com.renzobiz.simpletodo.Model.Task;
 import com.renzobiz.simpletodo.Model.TaskManager;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -196,6 +198,9 @@ public class TaskListFragment extends Fragment {
                 }
             }
         });
+
+        RecyclerView.ItemDecoration listSeperator = new ListSeperatorDecoration(mTaskRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        mTaskRecycler.addItemDecoration(listSeperator);
 
         return v;
     }
