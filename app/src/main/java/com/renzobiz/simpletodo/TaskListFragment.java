@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
@@ -130,8 +129,6 @@ public class TaskListFragment extends Fragment {
         mTaskRecycler = v.findViewById(R.id.task_recycler);
         mFloatingActionButton = v.findViewById(R.id.add_task);
         mRecyclerPlaceHolder = v.findViewById(R.id.recycler_placeholder);
-
-        mTaskRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         SwipeToDeleteCallback swipeHandler = new SwipeToDeleteCallback(getActivity()){
             @Override
