@@ -37,4 +37,8 @@ public interface TaskDao {
     //update
     @Update
     void update(Task task);
+
+    //vaporize
+    @Query("DELETE FROM task")
+    void vaporizeTable();
 }

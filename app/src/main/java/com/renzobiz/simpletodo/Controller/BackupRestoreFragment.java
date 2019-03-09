@@ -148,7 +148,8 @@ public class BackupRestoreFragment extends DialogFragment {
             FileInputStream backUp = new FileInputStream(destinationPath);
             ObjectInputStream restoreFile = new ObjectInputStream(backUp);
             restoreTasks = (List<Task>) restoreFile.readObject();
-            TaskManager.get(getContext()).updateAllAsync(restoreTasks);
+            TaskManager.get(getActivity()).destroyAsync();
+            TaskManager.get(getActivity()).updateAllAsync(restoreTasks);
             Toast.makeText(getActivity(), "Your tasks are now restored.", Toast.LENGTH_SHORT).show();
             createWork(restoreTasks);
             sendResult(Activity.RESULT_OK);

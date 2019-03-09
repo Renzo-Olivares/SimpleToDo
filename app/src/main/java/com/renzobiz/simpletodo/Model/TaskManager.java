@@ -25,6 +25,11 @@ public class TaskManager {
         return sTaskManager;
     }
 
+    public void destroyAsync(){
+        DestroyDbAsync vaporize = new DestroyDbAsync();
+        vaporize.execute();
+    }
+
     private static void addTask(Task task){
         taskDataBase.taskDao().insert(task);
     }
@@ -128,6 +133,15 @@ public class TaskManager {
         @Override
         protected Void doInBackground(final Void... params) {
             addTask(mTask);
+            return null;
+        }
+    }
+
+    private static class DestroyDbAsync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            taskDataBase.taskDao().vaporizeTable();
             return null;
         }
     }
