@@ -160,7 +160,11 @@ public class TaskListFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mAdapter.restoreItem(saveTask, deletedPosition);
-                                updateUI(false);
+                                if(mAdapter.getItemCount() == 0){
+                                    mRecyclerPlaceHolder.setVisibility(View.VISIBLE);
+                                }else{
+                                    mRecyclerPlaceHolder.setVisibility(View.GONE);
+                                }
                             }
                         }).addCallback(new Snackbar.Callback(){
                     @Override
