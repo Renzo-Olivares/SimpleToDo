@@ -14,10 +14,6 @@ ideas:
 - animations
 - mvvm
 
-1st delay :18 seconds (15-18)
-2nd delay :
-
-
 Bugs:
 
 other:
