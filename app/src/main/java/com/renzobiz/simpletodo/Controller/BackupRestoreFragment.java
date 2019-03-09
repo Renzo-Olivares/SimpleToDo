@@ -169,6 +169,7 @@ public class BackupRestoreFragment extends DialogFragment {
                 Data data = new Data.Builder()
                         .putString(NotificationWorker.EXTRA_TITLE, rTask.getTaskTitle())
                         .putString(NotificationWorker.EXTRA_ID, rTask.getTaskId().toString())
+                        .putString(NotificationWorker.EXTRA_DETAILS, rTask.getTaskDetails())
                         .build();
 
                 OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)

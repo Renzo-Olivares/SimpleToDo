@@ -16,6 +16,7 @@ import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -24,25 +25,29 @@ import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 public class NotificationWorker extends Worker {
     public static final String EXTRA_TITLE = "taskTitle";
     public static final String EXTRA_ID = "taskID";
+    public static final String EXTRA_DETAILS = "task_details";
     private static final String simpletodo_notification_channel = "Task Reminder";
     private UUID taskID;
     private String taskTitle;
+    private String taskDetails;
 
 
     public NotificationWorker(Context context, WorkerParameters params){
         super(context, params);
         taskID = UUID.fromString(getInputData().getString(EXTRA_ID));
         taskTitle = getInputData().getString(EXTRA_TITLE);
+        taskDetails = getInputData().getString(EXTRA_DETAILS);
+
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        triggerNotification(taskID, taskTitle);
+        triggerNotification(taskID, taskTitle, taskDetails);
         return Result.success();
     }
 
-    private void triggerNotification(UUID taskID, String taskTitle) {
+    private void triggerNotification(UUID taskID, String taskTitle, String taskDetails) {
         // Create the NotificationChannel on Android O and up
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //define the importance level of the notification
@@ -77,7 +82,7 @@ public class NotificationWorker extends Worker {
 
         //get notification details
         String notificationTitle = "Task Reminder : " + taskTitle;
-        String notificationText = "your task is due";
+        String notificationText = "Your Task Is Due!";
 
         //build notification
         NotificationCompat.Builder notificationBuilder =
@@ -85,6 +90,9 @@ public class NotificationWorker extends Worker {
                         .setSmallIcon(R.drawable.ic_reminder_small)
                         .setContentTitle(notificationTitle)
                         .setContentText(notificationText)
+                        .setColorized(true)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(taskDetails))
+                        .setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_red_dark))
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
                         .setPriority(NotificationCompat.PRIORITY_HIGH);

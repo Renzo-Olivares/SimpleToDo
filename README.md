@@ -2,6 +2,7 @@
 To Do:
     Priority scale (1-5)
 - app launch screen (5)
+- auto title capitalization on list view
 
 ideas:
 - if app has not launched in a while present welcome screen with upcoming tasks

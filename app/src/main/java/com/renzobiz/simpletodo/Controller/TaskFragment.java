@@ -250,6 +250,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
         Data data = new Data.Builder()
                 .putString(NotificationWorker.EXTRA_TITLE, mTask.getTaskTitle())
                 .putString(NotificationWorker.EXTRA_ID, mTask.getTaskId().toString())
+                .putString(NotificationWorker.EXTRA_DETAILS, mTask.getTaskDetails())
                 .build();
 
         OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
