@@ -184,8 +184,9 @@ public class BackupRestoreFragment extends DialogFragment {
     private long calculateDelay(Date taskDeadline) {
         long targetMilli = taskDeadline.getTime();
         long initialMilli = new Date().getTime();
+        long delay = 25000;
 
-        return targetMilli - initialMilli;
+        return (targetMilli - initialMilli) - delay;
     }
 
     private void sendResult(int resultCode){

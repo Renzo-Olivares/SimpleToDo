@@ -10,9 +10,13 @@ ideas:
 - multiple reminders
 - Launch activity, prompts to sign into google to restore, or restore from sdcard, or start new
 - Add timer indicator to indicate task approaching deadline on list item view
-- do delete task right away wait for snackbar callback
+- don't delete task right away wait for snackbar callback
 - animations
 - mvvm
+
+1st delay :18 seconds (15-18)
+2nd delay :
+
 
 Bugs:
 
