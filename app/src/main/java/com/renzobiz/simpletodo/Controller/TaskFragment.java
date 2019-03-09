@@ -262,11 +262,10 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
     }
 
     private long calculateDelay(Date taskDeadline) {
-       long targetMili = taskDeadline.getTime();
-       long initialMili = new Date().getTime();
-       long delayMili = targetMili - initialMili;
+       long targetMilli = taskDeadline.getTime();
+       long initialMilli = new Date().getTime();
 
-       return delayMili;
+       return targetMilli - initialMilli;
     }
 
     @Override

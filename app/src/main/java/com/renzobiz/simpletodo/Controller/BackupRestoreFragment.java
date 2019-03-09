@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.renzobiz.simpletodo.Model.Task;
 import com.renzobiz.simpletodo.Model.TaskManager;
 import com.renzobiz.simpletodo.R;
+import com.renzobiz.simpletodo.Worker.NotificationWorker;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,13 +27,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 public class BackupRestoreFragment extends DialogFragment {
     private static final String[] STORAGE_PERMISSIONS = new String[]{
@@ -143,11 +150,42 @@ public class BackupRestoreFragment extends DialogFragment {
             restoreTasks = (List<Task>) restoreFile.readObject();
             TaskManager.get(getContext()).updateAllAsync(restoreTasks);
             Toast.makeText(getActivity(), "Your tasks are now restored.", Toast.LENGTH_SHORT).show();
+            createWork(restoreTasks);
             sendResult(Activity.RESULT_OK);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             return;
         }
+    }
+
+    private void createWork(List<Task> restoreTasks) {
+        WorkManager.getInstance().cancelAllWork();
+        for(int i = 0; i < restoreTasks.size(); i++){
+            Task rTask = restoreTasks.get(i);
+            if(rTask.isRemindersEnabled() && (rTask.getTaskDeadline().getTime() > new Date().getTime())){
+                String TAG_NOTIFICATIONS = rTask.getTaskTitle().toUpperCase().replace(" ", "_");
+
+                Data data = new Data.Builder()
+                        .putString(NotificationWorker.EXTRA_TITLE, rTask.getTaskTitle())
+                        .putString(NotificationWorker.EXTRA_ID, rTask.getTaskId().toString())
+                        .build();
+
+                OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                        .setInitialDelay(calculateDelay(rTask.getTaskDeadline()), TimeUnit.MILLISECONDS)
+                        .setInputData(data)
+                        .addTag(TAG_NOTIFICATIONS)
+                        .build();
+
+                WorkManager.getInstance().enqueueUniqueWork(TAG_NOTIFICATIONS, ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+            }
+        }
+    }
+
+    private long calculateDelay(Date taskDeadline) {
+        long targetMilli = taskDeadline.getTime();
+        long initialMilli = new Date().getTime();
+
+        return targetMilli - initialMilli;
     }
 
     private void sendResult(int resultCode){
