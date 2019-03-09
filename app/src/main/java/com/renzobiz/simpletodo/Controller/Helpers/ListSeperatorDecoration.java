@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.renzobiz.simpletodo.Model.TaskManager;
+
+import java.util.concurrent.ExecutionException;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,13 +57,23 @@ public class ListSeperatorDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        if (parent.getLayoutManager() == null || mDivider == null) {
-            return;
-        }
-        if (mOrientation == VERTICAL) {
-            drawVertical(c, parent);
-        } else {
-            drawHorizontal(c, parent);
+        try {
+            if(TaskManager.get(parent.getContext()).getAllAsync().size() > 1){
+                if (parent.getLayoutManager() == null || mDivider == null) {
+                    return;
+                }
+                if (mOrientation == VERTICAL) {
+                    drawVertical(c, parent);
+                } else {
+                    drawHorizontal(c, parent);
+                }
+            }else{
+                return;
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
