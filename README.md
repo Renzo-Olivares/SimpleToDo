@@ -15,7 +15,5 @@ ideas:
 - mvvm
 
 Bugs:
-- fix restore db, and create a directory for this app backups on external (task-database shm)
 
 other:
-- clean up code.....(android lint warnings etc..)
