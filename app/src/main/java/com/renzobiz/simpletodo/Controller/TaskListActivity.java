@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.renzobiz.simpletodo.Model.Task;
 import com.renzobiz.simpletodo.Model.TaskManager;
@@ -19,7 +20,7 @@ public class TaskListActivity extends AppCompatActivity {
     public static Intent newIntent(Context packageContext, boolean hasDraft, Task saveTask, boolean isNotDraft){
         Intent intent = new Intent(packageContext, TaskListActivity.class);
         intent.putExtra(EXTRA_DRAFT, hasDraft);
-        intent.putExtra(EXTRA_SAVETASK, saveTask);
+        intent.putExtra(EXTRA_SAVETASK, (Parcelable) saveTask);
         intent.putExtra(EXTRA_NOTDRAFT, isNotDraft);
         return intent;
     }

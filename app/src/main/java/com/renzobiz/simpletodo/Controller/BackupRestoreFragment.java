@@ -1,8 +1,10 @@
 package com.renzobiz.simpletodo.Controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,14 +16,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.renzobiz.simpletodo.Model.Task;
+import com.renzobiz.simpletodo.Model.TaskManager;
 import com.renzobiz.simpletodo.R;
-import com.renzobiz.simpletodo.Database.TaskDataBase;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,13 +41,11 @@ public class BackupRestoreFragment extends DialogFragment {
     };
     private static final int REQUEST_STORAGE_PERMISSIONS_BACKUP = 0;
     private static final int REQUEST_STORAGE_PERMISSIONS_RESTORE = 1;
-    private String currentDBPath;
-    private String currentWalPath;
-    private String backupWalPath;
-    private String backupDBPath;
+    private static final String destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/taskBackup.ser";
     private Button mBackupButton;
     private Button mRestoreButton;
     private TextView mTitle;
+    public static final String EXTRA_RESTORE = "com.renzobiz.android.simpletodo.restore";
 
     @NonNull
     @Override
@@ -110,80 +114,50 @@ public class BackupRestoreFragment extends DialogFragment {
     }
 
     private void backupDB(){
-        File sd = Environment.getExternalStorageDirectory();
-        FileChannel source;
-        FileChannel source_wal;
-        FileChannel destination;
-        FileChannel destination_wal;
-
-        currentDBPath = getActivity().getDatabasePath(TaskDataBase.DATABASE_NAME).getAbsolutePath();
-        currentWalPath = getActivity().getDatabasePath(TaskDataBase.DATABASE_NAME).getAbsolutePath() + "-wal";
-        backupDBPath = "/task_database";
-        backupWalPath = "/task_database-wal";
-
-        File currentDB = new File(currentDBPath);
-        File currentWal = new File(currentWalPath);
-        File backupDB = new File(sd, backupDBPath);
-        File backupWal = new File(sd, backupWalPath);
+        List<Task> backupTasks = null;
+        try {
+            backupTasks = TaskManager.get(getActivity()).getAllAsync();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         try{
-            source = new FileInputStream(currentDB).getChannel();
-            source_wal = new FileInputStream(currentWal).getChannel();
-
-            destination = new FileOutputStream(backupDB).getChannel();
-            destination_wal = new FileOutputStream(backupWal).getChannel();
-
-            destination.transferFrom(source, 0, source.size());
-            destination_wal.transferFrom(source_wal,0,source_wal.size());
-
-            source.close();
-            source_wal.close();
-
-            destination.close();
-            destination_wal.close();
-
-            Toast.makeText(getActivity(), "Your tasks are now backed up.", Toast.LENGTH_LONG).show();
-        }catch(IOException e){
+            FileOutputStream backupFile = new FileOutputStream(destinationPath);
+            ObjectOutput backupObjects = new ObjectOutputStream(backupFile);
+            backupObjects.writeObject(backupTasks);
+            backupObjects.close();
+            backupFile.close();
+            Toast.makeText(getActivity(), "Your tasks are now backed up.", Toast.LENGTH_SHORT).show();
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    private void restoreDB(){
-        File sd = Environment.getExternalStorageDirectory();
-        FileChannel source;
-        FileChannel source_wal;
-        FileChannel destination;
-        FileChannel destination_wal;
-
-        currentDBPath = getActivity().getDatabasePath(TaskDataBase.DATABASE_NAME).getAbsolutePath();
-        currentWalPath = getActivity().getDatabasePath(TaskDataBase.DATABASE_NAME).getAbsolutePath() + "-wal";
-        backupDBPath = "/task_database";
-        backupWalPath = "/task_database-wal";
-
-        File currentDB = new File(currentDBPath);
-        File currentWal = new File(currentWalPath);
-        File backupDB = new File(sd, backupDBPath);
-        File backupWal = new File(sd, backupWalPath);
-
-        try{
-            source = new FileInputStream(backupDB).getChannel();
-            source_wal = new FileInputStream(backupWal).getChannel();
-
-            destination = new FileOutputStream(currentDB).getChannel();
-            destination_wal = new FileOutputStream(currentWal).getChannel();
-
-            destination.transferFrom(source, 0, source.size());
-            destination_wal.transferFrom(source_wal,0,source_wal.size());
-
-            source.close();
-            source_wal.close();
-
-            destination.close();
-            destination_wal.close();
-
-            Toast.makeText(getActivity(), "Your tasks are now restored.", Toast.LENGTH_LONG).show();
-        }catch(IOException e){
+    private void restoreDB() {
+        List<Task> restoreTasks;
+        try {
+            FileInputStream backUp = new FileInputStream(destinationPath);
+            ObjectInputStream restoreFile = new ObjectInputStream(backUp);
+            restoreTasks = (List<Task>) restoreFile.readObject();
+            TaskManager.get(getContext()).updateAllAsync(restoreTasks);
+            Toast.makeText(getActivity(), "Your tasks are now restored.", Toast.LENGTH_SHORT).show();
+            sendResult(Activity.RESULT_OK);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            return;
         }
+    }
+
+    private void sendResult(int resultCode){
+        if(getTargetFragment() == null){
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_RESTORE, true);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

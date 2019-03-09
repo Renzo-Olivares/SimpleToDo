@@ -3,6 +3,7 @@ package com.renzobiz.simpletodo.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "task")
-public class Task implements Parcelable {
+public class Task implements Parcelable, Serializable {
     @ColumnInfo(name = "task_title")
     private String taskTitle;
 

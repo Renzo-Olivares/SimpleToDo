@@ -1,5 +1,6 @@
 package com.renzobiz.simpletodo.Controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.renzobiz.simpletodo.Controller.BackupRestoreFragment.EXTRA_RESTORE;
 import static java.text.DateFormat.FULL;
 
 public class TaskListFragment extends Fragment {
@@ -44,6 +46,7 @@ public class TaskListFragment extends Fragment {
     private static final String ARGS_SAVETASK = "save_task";
     private static final String ARGS_NOTDRAFT = "not_draft";
     private static final String DIALOG_BACKUP_RESTORE = "DialogBackupRestore";
+    private static final int REQUEST_RESTORE = 0;
 
     private RecyclerView mTaskRecycler;
     private TextView mRecyclerPlaceHolder;
@@ -380,6 +383,7 @@ public class TaskListFragment extends Fragment {
                 public void onClick(View view) {
                     FragmentManager manager = getFragmentManager();
                     BackupRestoreFragment brDialog = new BackupRestoreFragment();
+                    brDialog.setTargetFragment(TaskListFragment.this, REQUEST_RESTORE);
                     brDialog.show(manager, DIALOG_BACKUP_RESTORE);
                 }
             });
@@ -394,5 +398,20 @@ public class TaskListFragment extends Fragment {
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode != Activity.RESULT_OK){
+            return;
+        }
+
+        switch(requestCode){
+            case REQUEST_RESTORE:
+                if(data.getBooleanExtra(EXTRA_RESTORE, false)) updateUI(true);
+                break;
+            default:
+                super.onActivityResult(requestCode,resultCode,data);
+        }
     }
 }
