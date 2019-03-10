@@ -291,7 +291,6 @@ public class TaskListFragment extends Fragment {
         private TextView mTaskTitle;
         private TextView mTaskDate;
         private TextView mTaskTime;
-        private TextView mDateSeperator;
         private Task mTask;
 
         @Override
