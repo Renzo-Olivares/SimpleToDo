@@ -27,6 +27,7 @@ public class NotificationWorker extends Worker {
     public static final String EXTRA_ID = "taskID";
     public static final String EXTRA_DETAILS = "task_details";
     private static final String simpletodo_notification_channel = "Task Reminder";
+    private static final String TASK_GROUP = "Reminders" ;
     private UUID taskID;
     private String taskTitle;
     private String taskDetails;
@@ -81,27 +82,56 @@ public class NotificationWorker extends Worker {
                 PendingIntent.getActivity(getApplicationContext(), 1, intent, FLAG_UPDATE_CURRENT);
 
         //get notification details
-        String notificationTitle = "Task Reminder : " + taskTitle;
-        String notificationText = "Your Task Is Due!";
+        String notificationTitle = taskTitle + ": ";
+
+        NotificationCompat.Builder summaryBuilder = null;
+        //build summary notification
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            summaryBuilder =
+                    new NotificationCompat.Builder(getApplicationContext(), simpletodo_notification_channel)
+                            .setSmallIcon(R.drawable.ic_reminder_small)
+                            .setStyle(new NotificationCompat.InboxStyle()
+                                    .setSummaryText(TASK_GROUP))
+                            .setGroupSummary(true)
+                            .setColorized(true)
+                            .setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_red_dark))
+                            .setGroup(TASK_GROUP)
+                            .setAutoCancel(true);
+        }else{
+            notificationTitle = "Reminder : " + taskTitle;
+        }
 
         //build notification
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(getApplicationContext(), simpletodo_notification_channel)
                         .setSmallIcon(R.drawable.ic_reminder_small)
                         .setContentTitle(notificationTitle)
-                        .setContentText(notificationText)
+                        .setContentText(taskDetails)
                         .setColorized(true)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(taskDetails))
                         .setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_red_dark))
                         .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                        .setAutoCancel(true);
+
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
+            notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setVibrate(new long[0])
+                    .setGroup(TASK_GROUP);
+        }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            notificationBuilder.setGroup(TASK_GROUP);
+        }else{
+            notificationBuilder.setTicker(notificationTitle)
+                    .setSmallIcon(R.drawable.ic_reminder_small_kk);
+        }
 
         //trigger notification
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(getApplicationContext());
 
         //give notification unique ID
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            notificationManager.notify(777, summaryBuilder.build());
+        }
         notificationManager.notify(NotificationID.getID(), notificationBuilder.build());
     }
 }
