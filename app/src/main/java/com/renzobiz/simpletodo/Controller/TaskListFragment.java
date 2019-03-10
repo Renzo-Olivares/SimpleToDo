@@ -39,6 +39,7 @@ import java.util.concurrent.ExecutionException;
 
 import static com.renzobiz.simpletodo.Controller.BackupRestoreFragment.EXTRA_RESTORE;
 import static java.text.DateFormat.FULL;
+import static java.text.DateFormat.SHORT;
 
 public class TaskListFragment extends Fragment {
     private static final String EXTRA_POSITION = "com.renzobiz.android.simpletodo.adapterposition";
@@ -290,6 +291,8 @@ public class TaskListFragment extends Fragment {
     private class TaskHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTaskTitle;
         private TextView mTaskDate;
+        private TextView mTaskTime;
+        private TextView mDateSeperator;
         private Task mTask;
 
         @Override
@@ -304,15 +307,21 @@ public class TaskListFragment extends Fragment {
             super(inflater.inflate(R.layout.list_item_task,parent,false));
             mTaskTitle = itemView.findViewById(R.id.task_title);
             mTaskDate = itemView.findViewById(R.id.task_date);
+            mTaskTime = itemView.findViewById(R.id.task_time);
+            mDateSeperator = itemView.findViewById(R.id.deadline_seperator);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Task task){
             mTask = task;
-            String date = DateFormat.getDateInstance(FULL).format(task.getTaskDeadline());
+            String date = DateFormat.getDateInstance(SHORT).format(task.getTaskDeadline());
+            String time = DateFormat.getTimeInstance(SHORT).format(task.getTaskDeadline());
             mTaskTitle.setText(mTask.getTaskTitle());
             mTaskDate.setText(date);
+            mTaskTime.setText(time);
             mTaskDate.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
+            mDateSeperator.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
+            mTaskTime.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
         }
     }
 
