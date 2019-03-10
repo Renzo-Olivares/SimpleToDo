@@ -1,5 +1,6 @@
 package com.renzobiz.simpletodo.Worker;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -84,8 +85,25 @@ public class NotificationWorker extends Worker {
         //get notification details
         String notificationTitle = taskTitle + ": ";
 
-        NotificationCompat.Builder summaryBuilder = null;
+        //public notification
+        Notification publicNotifi = null;
+        //build public notification
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT){
+            publicNotifi =
+                    new NotificationCompat.Builder(getApplicationContext(), simpletodo_notification_channel)
+                            .setSmallIcon(R.drawable.ic_reminder_small)
+                            .setStyle(new NotificationCompat.InboxStyle()
+                                    .setSummaryText(TASK_GROUP))
+                            .setContentTitle("New Reminders!")
+                            .setColorized(true)
+                            .setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_red_dark))
+                            .setAutoCancel(true)
+                            .build();
+        }
+
+
         //build summary notification
+        NotificationCompat.Builder summaryBuilder = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             summaryBuilder =
                     new NotificationCompat.Builder(getApplicationContext(), simpletodo_notification_channel)
@@ -96,6 +114,7 @@ public class NotificationWorker extends Worker {
                             .setColorized(true)
                             .setColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_red_dark))
                             .setGroup(TASK_GROUP)
+                            .setPublicVersion(publicNotifi)
                             .setAutoCancel(true);
         }else{
             notificationTitle = "Reminder : " + taskTitle;
@@ -116,9 +135,12 @@ public class NotificationWorker extends Worker {
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.O){
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVibrate(new long[0])
-                    .setGroup(TASK_GROUP);
+                    .setGroup(TASK_GROUP)
+                    .setPublicVersion(publicNotifi);
         }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            notificationBuilder.setGroup(TASK_GROUP);
+            notificationBuilder.setGroup(TASK_GROUP)
+                    .setPublicVersion(publicNotifi);
+
         }else{
             notificationBuilder.setTicker(notificationTitle)
                     .setSmallIcon(R.drawable.ic_reminder_small_kk);

@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.renzobiz.simpletodo.Controller.BackupRestoreFragment.EXTRA_RESTORE;
-import static java.text.DateFormat.FULL;
 import static java.text.DateFormat.SHORT;
 
 public class TaskListFragment extends Fragment {
