@@ -139,7 +139,7 @@ public class BackupRestoreFragment extends DialogFragment {
             Toast.makeText(getActivity(), "Your tasks are now backed up.", Toast.LENGTH_SHORT).show();
         }catch (IOException e){
             Toast.makeText(getActivity(), "Backup unsuccessful, please try again and contact the" +
-                    " developer if the problem persists.", Toast.LENGTH_SHORT).show();
+                    " developer if the problem persists.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
