@@ -2,9 +2,14 @@ package com.renzobiz.simpletodo.Controller;
 
 import android.content.Context;
 import android.content.Intent;
+
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.os.Parcelable;
 
@@ -12,10 +17,13 @@ import com.renzobiz.simpletodo.Model.Task;
 import com.renzobiz.simpletodo.Model.TaskManager;
 import com.renzobiz.simpletodo.R;
 
+import java.util.Arrays;
+
 public class TaskListActivity extends AppCompatActivity {
     private static final String EXTRA_DRAFT= "com.renzobiz.android.simpletodo.hasdraft";
     private static final String EXTRA_SAVETASK= "com.renzobiz.android.simpletodo.savetask";
     private static final String EXTRA_NOTDRAFT= "com.renzobiz.android.simpletodo.notdraft";
+    private static final String NEW_TASK_SHORTCUT= "ADD_NEW_TASK";
 
     public static Intent newIntent(Context packageContext, boolean hasDraft, Task saveTask, boolean isNotDraft){
         Intent intent = new Intent(packageContext, TaskListActivity.class);
@@ -46,5 +54,18 @@ public class TaskListActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+
+        appShortcuts();
+    }
+
+    private void appShortcuts(){
+        Intent newIntent = TaskPagerActivity.newIntent(this, null, false);
+        ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(this, NEW_TASK_SHORTCUT)
+                .setShortLabel("New Task")
+                .setLongLabel("Add New Task")
+                .setIcon(IconCompat.createWithResource(this, R.drawable.add_task))
+                .setIntent(newIntent.setAction(Intent.ACTION_VIEW))
+                .build();
+        ShortcutManagerCompat.addDynamicShortcuts(this, Arrays.asList(shortcut));
     }
 }
