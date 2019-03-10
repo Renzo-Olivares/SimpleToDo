@@ -22,27 +22,14 @@
         android:id="@+id/task_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="4dp"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintBottom_toTopOf="@id/deadline_seperator"
+        app:layout_constraintBottom_toTopOf="@id/task_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/deadline_seperator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="37dp"
-        android:textAlignment="center"
-        android:text="at"
-        android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintBottom_toTopOf="@+id/task_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_date"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/task_time"
@@ -50,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="18dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deadline_seperator" />
+        app:layout_constraintTop_toBottomOf="@id/task_date" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -307,7 +307,6 @@ public class TaskListFragment extends Fragment {
             mTaskTitle = itemView.findViewById(R.id.task_title);
             mTaskDate = itemView.findViewById(R.id.task_date);
             mTaskTime = itemView.findViewById(R.id.task_time);
-            mDateSeperator = itemView.findViewById(R.id.deadline_seperator);
             itemView.setOnClickListener(this);
         }
 
@@ -319,7 +318,6 @@ public class TaskListFragment extends Fragment {
             mTaskDate.setText(date);
             mTaskTime.setText(time);
             mTaskDate.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
-            mDateSeperator.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
             mTaskTime.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
         }
     }
