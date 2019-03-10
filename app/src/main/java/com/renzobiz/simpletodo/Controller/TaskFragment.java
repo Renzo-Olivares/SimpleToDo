@@ -140,10 +140,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_task,container,false);
-
         boolean tool = getArguments().getBoolean(ARGS_TOOL);
         setUpToolbar(v, tool);
-
         mTaskTitle = v.findViewById(R.id.task_title);
         mTaskDetails = v.findViewById(R.id.task_details);
         mDueDateText = v.findViewById(R.id.date_button);
@@ -151,17 +149,6 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
         mSaveButton = v.findViewById(R.id.save_button);
         mCardReminder = v.findViewById(R.id.cardView);
         mReminderSwitch = v.findViewById(R.id.switchReminder);
-        return v;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mCardReminder.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
-        mReminderSwitch.setChecked(mTask.isRemindersEnabled());
-        mTaskTitle.setText(mTask.getTaskTitle());
-        mTaskDetails.setText(mTask.getTaskDetails());
 
         if(!getArguments().getBoolean(ARGS_TOOL)){
             mSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +165,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
             mSaveButton.setVisibility(View.GONE);
         }
 
+        mCardReminder.setVisibility(mTask.isRemindersEnabled()? View.VISIBLE:View.INVISIBLE);
+
         mTaskTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -185,8 +174,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String taskTitle = charSequence.toString();
-                mTask.setTaskTitle(taskTitle);
+                    String taskTitle = charSequence.toString();
+                    mTask.setTaskTitle(taskTitle);
             }
 
             @Override
@@ -203,8 +192,8 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String taskDetails = charSequence.toString();
-                mTask.setTaskDetails(taskDetails);
+                    String taskDetails = charSequence.toString();
+                    mTask.setTaskDetails(taskDetails);
             }
 
             @Override
@@ -235,6 +224,7 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
             }
         });
 
+        mReminderSwitch.setChecked(mTask.isRemindersEnabled());
         mReminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -247,6 +237,11 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
                 }
             }
         });
+
+        mTaskTitle.setText(mTask.getTaskTitle());
+        mTaskDetails.setText(mTask.getTaskDetails());
+
+        return v;
     }
 
     private void createWork() {
@@ -375,13 +370,5 @@ public class TaskFragment extends Fragment implements IOnBackPressed {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mTaskTitle.addTextChangedListener(null);
-        mTaskDetails.addTextChangedListener(null);
-        mDueDateText.setOnClickListener(null);
-        mDueTimeText.setOnClickListener(null);
-        mReminderSwitch.setOnCheckedChangeListener(null);
-    }
+
 }

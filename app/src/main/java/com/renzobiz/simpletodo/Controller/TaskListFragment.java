@@ -182,21 +182,6 @@ public class TaskListFragment extends Fragment {
         ItemTouchHelper itemHelper = new ItemTouchHelper(swipeHandler);
         itemHelper.attachToRecyclerView(mTaskRecycler);
 
-        linearLay = new LinearLayoutManager(getActivity());
-        mTaskRecycler.setLayoutManager(linearLay);
-        mTaskRecycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        updateUI(false);
-
-        RecyclerView.ItemDecoration listSeperator = new ListSeperatorDecoration(mTaskRecycler.getContext(), DividerItemDecoration.VERTICAL);
-        mTaskRecycler.addItemDecoration(listSeperator);
-
-        return v;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,6 +191,11 @@ public class TaskListFragment extends Fragment {
                 updateUI(true);
             }
         });
+
+        linearLay = new LinearLayoutManager(getActivity());
+        mTaskRecycler.setLayoutManager(linearLay);
+        mTaskRecycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        updateUI(false);
 
         mTaskRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -218,6 +208,10 @@ public class TaskListFragment extends Fragment {
             }
         });
 
+        RecyclerView.ItemDecoration listSeperator = new ListSeperatorDecoration(mTaskRecycler.getContext(), DividerItemDecoration.VERTICAL);
+        mTaskRecycler.addItemDecoration(listSeperator);
+
+        return v;
     }
 
     @Override
@@ -424,12 +418,5 @@ public class TaskListFragment extends Fragment {
             default:
                 super.onActivityResult(requestCode,resultCode,data);
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mFloatingActionButton.setOnClickListener(null);
-        mTaskRecycler.addOnScrollListener(null);
     }
 }
