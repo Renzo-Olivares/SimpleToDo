@@ -1,3 +1,2 @@
 # Tasks
-![GitHub Logo](/showcase/edit_task_dark.png)
-Format: ![Alt Text](https://github.com/Renzo-Olivares/SimpleToDo/blob/master/showcase/edit_task_dark.png)
+Light Mode Showcase: ![Alt Text](https://github.com/Renzo-Olivares/SimpleToDo/blob/master/showcase/tasks_light_showcase_gif.gif)
