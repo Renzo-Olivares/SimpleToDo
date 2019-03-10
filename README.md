@@ -2,8 +2,11 @@
 ## Showcase
 
 **Device Screenshots**
+
 <img src="/showcase/list_dark.png" height="400px"/> <img src="/showcase/list_light.png" height="400px"/>
 <img src="/showcase/edit_task_dark.png" height="400px"/> <img src="/showcase/new_task_light.png" height="400px"/>
+<img src="/showcase/restore.png" height="400px"/>
+
 
 **Light Mode Showcase:**
 
