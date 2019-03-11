@@ -10,12 +10,11 @@
 
 **Light Mode Showcase:**
 
-![Alt Text](https://github.com/Renzo-Olivares/SimpleToDo/blob/master/showcase/tasks_light_showcase_gif.gif)
-<img src="/showcase/tasks_light_showcase_gif.gif" height="300px"/>
+<img src="/showcase/tasks_light_showcase_gif.gif" height="600px"/>
 
 **Dark Mode Showcase:**
 
-![Alt Text](https://github.com/Renzo-Olivares/SimpleToDo/blob/master/showcase/tasks_dark_showcase_gif.gif)
+<img src="/showcase/tasks_dark_showcase_gif.gif" height="600px"/>
 
 ## Features
 * Backup and Restore your tasks
