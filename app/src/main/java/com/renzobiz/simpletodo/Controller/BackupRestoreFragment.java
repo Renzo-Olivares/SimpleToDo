@@ -136,7 +136,8 @@ public class BackupRestoreFragment extends DialogFragment {
             backupObjects.writeObject(backupTasks);
             backupObjects.close();
             backupFile.close();
-            Toast.makeText(getActivity(), "Your tasks are now backed up.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Backup successful. File located in root directory of" +
+                    " internal storage as taskBackup.ser", Toast.LENGTH_LONG).show();
         }catch (IOException e){
             Toast.makeText(getActivity(), "Backup unsuccessful, please try again and contact the" +
                     " developer if the problem persists.", Toast.LENGTH_LONG).show();
@@ -152,7 +153,7 @@ public class BackupRestoreFragment extends DialogFragment {
             restoreTasks = (List<Task>) restoreFile.readObject();
             TaskManager.get(getActivity()).destroyAsync();
             TaskManager.get(getActivity()).updateAllAsync(restoreTasks);
-            Toast.makeText(getActivity(), "Your tasks are now restored.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Restore successful.", Toast.LENGTH_SHORT).show();
             createWork(restoreTasks);
             sendResult(Activity.RESULT_OK);
         } catch (IOException | ClassNotFoundException e) {
