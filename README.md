@@ -3,9 +3,9 @@
 
 **Device Screenshots**
 
-<img src="/showcase/list_dark.png" height="400px"/> <img src="/showcase/list_light.png" height="400px"/>
-<img src="/showcase/edit_task_dark.png" height="400px"/> <img src="/showcase/new_task_light.png" height="400px"/>
-<center><img src="/showcase/restore.png" height="400px"/></center>
+<img src="/showcase/list_dark.png" height="300px"/> <img src="/showcase/list_light.png" height="300px"/>
+<img src="/showcase/edit_task_dark.png" height="300px"/> <img src="/showcase/new_task_light.png" height="300px"/>
+<img src="/showcase/restore.png" height="300px"/>
 
 
 **Light Mode Showcase:**
@@ -38,8 +38,15 @@ A: XDA-THREAD Link or github
 
 **Q: Where is my backup stored?**
 
-A: It is saved to the root of your internal storage as taskBackup.ser.
+A: It is saved to the root directory of your internal storage as taskBackup.ser.
 
+**Q: How do i restore my tasks?**
+
+A: Note that restoring your tasks will delete any current tasks you have in your list.
+   1. Make sure your taskBackup.ser file is in the root directory of your internal storage. 
+   2. Press the backup/restore button on the left hand side of the toolbar.
+   3. Press restore button.
+   
 **Q: What permissions does this application require?**
 
 A: This application only requires permissions for writing and reading your internal storage. This is necessary for backup and restore to read and write files.
