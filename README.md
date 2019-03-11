@@ -8,13 +8,8 @@
 <img src="/showcase/restore.png" height="300px"/>
 
 
-**Light Mode Showcase:**
-
-<img src="/showcase/tasks_light_showcase_gif.gif" height="600px"/>
-
-**Dark Mode Showcase:**
-
-<img src="/showcase/tasks_dark_showcase_gif.gif" height="600px"/>
+**Light Mode Showcase:** <img src="/showcase/tasks_light_showcase_gif.gif" height="600px"/>
+**Dark Mode Showcase:** <img src="/showcase/tasks_dark_showcase_gif.gif" height="600px"/>
 
 ## Features
 * Backup and Restore your tasks
