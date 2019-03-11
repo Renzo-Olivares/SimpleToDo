@@ -8,7 +8,7 @@
 <img src="/showcase/restore.png" height="300px"/>
 
 
-**Light Mode Showcase:**                                           **Dark Mode Showcase:**
+**Light Mode Showcase:**&nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;  **Dark Mode Showcase:**
 
 <img src="/showcase/tasks_light_showcase_gif.gif" height="600px"/> <img src="/showcase/tasks_dark_showcase_gif.gif" height="600px"/>
 
