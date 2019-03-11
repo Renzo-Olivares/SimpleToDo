@@ -11,6 +11,7 @@
 **Light Mode Showcase:**
 
 ![Alt Text](https://github.com/Renzo-Olivares/SimpleToDo/blob/master/showcase/tasks_light_showcase_gif.gif)
+<img src="/showcase/tasks_light_showcase_gif.gif" height="300px"/>
 
 **Dark Mode Showcase:**
 
