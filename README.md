@@ -30,7 +30,7 @@
 ## FAQ
 **Q: Where can I report bugs, get support, or make feature requests?**
 
-A: XDA-THREAD Link or github
+A: XDA-THREAD: https://forum.xda-developers.com/android/apps-games/app-simple-tasks-t3909757/post79086109#post79086109  or here on Github's issue tracker.
 
 **Q: Where is my backup stored?**
 
