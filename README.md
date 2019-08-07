@@ -7,6 +7,12 @@
 <img src="/showcase/edit_task_dark.png" height="300px"/> <img src="/showcase/new_task_light.png" height="300px"/>
 <img src="/showcase/restore.png" height="300px"/>
 
+<img src="/showcase/darkshowinput.png" height="300px"/> <img src="/showcase/lightshowinput.png" height="300px"/>
+<img src="/showcase/lightshowmain.png" height="300px"/>
+
+<img src="/showcase/twitterdrawerdark.png" height="300px"/> <img src="/showcase/twittermainlight.png" height="300px"/>
+<img src="/showcase/twitterdrawerlight.png" height="300px"/> <img src="/showcase/twittermaindark.png" height="300px"/>
+
 
 **Light Mode Showcase:**&nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;  &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; &nbsp;   &nbsp;   &nbsp;   &nbsp;   &nbsp; **Dark Mode Showcase:**
 
